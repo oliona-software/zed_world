@@ -1,0 +1,2334 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZED WORLD - Dessins & Inspirations de la Réunion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+        /* ===== POLICES PERSONNALISÉES ===== */
+        @font-face {
+            font-family: 'Old Press';
+            src: url('fonts/OldPress-Normal.woff2') format('woff2'),
+                url('fonts/OldPress-Normal.woff') format('woff'),
+                url('fonts/OldPress-Normal.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'A Bit Sketchy';
+            src: url('fonts/ABitSketchy.woff2') format('woff2'),
+                url('fonts/ABitSketchy.woff') format('woff'),
+                url('fonts/ABitSketchy.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Javanese Text';
+            src: url('fonts/JavaneseText.woff2') format('woff2'),
+                url('fonts/JavaneseText.woff') format('woff'),
+                url('fonts/JavaneseText.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --noir: #1d1d1b;
+            --noir-profond: #1d1d1b;
+            --noir-light: #2a2a28;
+            --noir-medium: #252523;
+            --rouge: #c6332c;
+            --rouge-dark: #9a2520;
+            --blanc: #ffffff;
+            --blanc-casse: #f5f5f5;
+            --gris: #6a6a6a;
+            --gris-clair: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Javanese Text', Georgia, serif;
+            background-color: var(--noir);
+            color: var(--blanc);
+            overflow-x: hidden;
+        }
+
+        /* ===== EFFETS PAILLETTES DORÉES ===== */
+        .gold-sparkle {
+            position: relative;
+        }
+
+        .gold-sparkle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(1px 1px at 20px 30px, #d4af37, transparent),
+                radial-gradient(1px 1px at 40px 70px, #ffd700, transparent),
+                radial-gradient(0.5px 0.5px at 90px 40px, #f0e68c, transparent),
+                radial-gradient(1px 1px at 130px 80px, #d4af37, transparent),
+                radial-gradient(0.5px 0.5px at 160px 30px, #ffd700, transparent);
+            background-size: 200px 100px;
+            animation: sparkle 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .gold-text {
+            background: linear-gradient(135deg,
+                    #d4af37 0%,
+                    #f0e68c 25%,
+                    #d4af37 50%,
+                    #ffd700 75%,
+                    #d4af37 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+
+
+        /* ===== LOADER ===== */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--noir-profond);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .loader-text {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: clamp(2rem, 8vw, 5rem);
+            font-weight: 600;
+            letter-spacing: 0.5em;
+            overflow: hidden;
+        }
+
+        .loader-text span {
+            display: inline-block;
+            animation: revealLetter 0.8s ease forwards;
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        .loader-text .gold-letter {
+            background: linear-gradient(135deg, #d4af37, #ffd700, #d4af37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .loader-text .red-letter {
+            color: var(--rouge);
+        }
+
+        @keyframes revealLetter {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loader-line {
+            width: 0;
+            height: 2px;
+            background: var(--rouge);
+            margin-top: 2rem;
+            animation: expandLine 1.5s ease 0.8s forwards;
+        }
+
+        @keyframes expandLine {
+            to {
+                width: 200px;
+            }
+        }
+
+        .loader.hidden {
+            animation: loaderFadeOut 1s ease forwards;
+        }
+
+        @keyframes loaderFadeOut {
+            0% {
+                clip-path: inset(0 0 0 0);
+            }
+
+            100% {
+                clip-path: inset(0 0 100% 0);
+            }
+        }
+
+        .loader-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .loader-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #d4af37;
+            border-radius: 50%;
+            animation: floatParticle 3s ease-in-out infinite;
+        }
+
+        @keyframes floatParticle {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: translateY(0) scale(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateY(-50px) scale(1);
+            }
+        }
+
+        /* ===== NOISE OVERLAY ===== */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+            transition: all 0.4s ease;
+        }
+
+        header.header-scrolled {
+            background: rgba(15, 15, 14, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1rem 4rem;
+            mix-blend-mode: normal;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--blanc);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            position: relative;
+            padding: 0.5rem 0;
+            font-family: 'Javanese Text', Georgia, serif;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--blanc);
+            transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .menu-btn span {
+            width: 35px;
+            height: 1px;
+            background: var(--blanc);
+            transition: all 0.4s ease;
+        }
+
+        /* ===== HERO SECTION AVEC GLOBE 3D ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: var(--noir-profond);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 30%, rgba(196, 30, 58, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
+        }
+
+        .hero-content-centered {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-content-centered .hero-label {
+            justify-content: center;
+        }
+
+        .hero-content-centered .hero-label::before {
+            display: none;
+        }
+
+        .hero-content-centered .hero-subtitle {
+            margin: 0 auto 3rem;
+        }
+
+        .hero-content-centered .hero-cta {
+            justify-content: center;
+        }
+
+        /* ===== GLOBE SECTION ===== */
+        .globe-section {
+            padding: 6rem 4rem 4rem;
+            background: var(--noir);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .globe-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+        }
+
+        .globe-section-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .globe-text {
+            margin-bottom: 3rem;
+            max-width: 700px;
+        }
+
+        .globe-title {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .globe-description {
+            font-size: 1.15rem;
+            font-weight: 300;
+            color: var(--gris-clair);
+            line-height: 1.9;
+            margin-bottom: 2rem;
+        }
+
+        .globe-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            height: 70vh;
+            min-height: 500px;
+            max-height: 800px;
+        }
+
+        #globe-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Points interactifs sur le globe */
+        .city-point {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--rouge);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(196, 30, 58, 0.6);
+        }
+
+        .city-point::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: rgba(196, 30, 58, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse-point 2s ease-out infinite;
+        }
+
+        .city-point:hover {
+            transform: scale(1.5);
+            background: #d4af37;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+        }
+
+        @keyframes pulse-point {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        .city-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #d4af37;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 25;
+            font-size: 0.9rem;
+        }
+
+        .city-point:hover .city-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            padding: 2rem 4rem;
+        }
+
+        .hero-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--rouge);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp 1s ease 1.5s forwards;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--rouge);
+        }
+
+        .hero-title {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .hero-title .line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title .line span {
+            display: block;
+            transform: translateY(100%);
+            animation: slideUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .hero-title .line:nth-child(2) span {
+            animation-delay: 0.15s;
+        }
+
+        .hero-title .line:nth-child(3) span {
+            animation-delay: 0.3s;
+        }
+
+        .hero-title .highlight {
+            color: var(--rouge);
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--gris-clair);
+            max-width: 450px;
+            line-height: 1.9;
+            opacity: 0;
+            animation: fadeUp 1s ease 1.8s forwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+            opacity: 0;
+            animation: fadeUp 1s ease 2s forwards;
+        }
+
+        .btn {
+            padding: 1.2rem 2.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            font-family: 'Javanese Text', Georgia, serif;
+        }
+
+        .btn-primary {
+            background: var(--rouge);
+            color: var(--blanc);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--blanc);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn-primary:hover {
+            color: var(--noir);
+        }
+
+        .btn-primary:hover::before {
+            left: 0;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--blanc);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline:hover {
+            border-color: #d4af37;
+            color: #d4af37;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            animation: fadeUp 1s ease 2.5s forwards;
+            z-index: 10;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .scroll-indicator:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        .scroll-arrow {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounceArrow 2s ease-in-out infinite;
+        }
+
+        .scroll-arrow svg {
+            width: 30px;
+            height: 30px;
+            fill: none;
+            stroke: var(--blanc);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @keyframes bounceArrow {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(10px);
+            }
+        }
+
+        /* ===== PAILLETTES FLOTTANTES ===== */
+        .sparkles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #d4af37;
+            border-radius: 50%;
+            animation: float-sparkle linear infinite;
+            box-shadow: 0 0 6px #d4af37;
+        }
+
+        @keyframes float-sparkle {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-10vh) rotate(720deg);
+            }
+        }
+
+        /* ===== MARQUEE ===== */
+        .marquee-section {
+            padding: 3rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            background: var(--noir);
+        }
+
+        .marquee {
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 4rem;
+            padding-right: 4rem;
+            white-space: nowrap;
+        }
+
+        .marquee-item {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--gris);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .marquee-item::before {
+            content: '✦';
+            color: var(--rouge);
+            font-size: 0.8rem;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about-section {
+            padding: 12rem 4rem;
+            position: relative;
+            background: var(--noir);
+        }
+
+        .about-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8rem;
+            align-items: center;
+        }
+
+        .about-visual {
+            position: relative;
+            aspect-ratio: 4/5;
+        }
+
+        .about-image {
+            position: absolute;
+            width: 80%;
+            height: 90%;
+            background: var(--noir-light);
+            border: 1px solid var(--noir-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(196, 30, 58, 0.1), transparent);
+            z-index: 1;
+        }
+
+        .about-image-1 {
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .about-image-2 {
+            bottom: 0;
+            right: 0;
+            width: 60%;
+            height: 50%;
+            z-index: 3;
+        }
+
+        .about-frame {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            right: -2rem;
+            bottom: -2rem;
+            border: 1px solid var(--rouge);
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .about-content {
+            padding: 2rem 0;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--rouge);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--rouge);
+        }
+
+        .about-title {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--gris-clair);
+            line-height: 2;
+            margin-bottom: 2rem;
+        }
+
+        .about-stats {
+            display: flex;
+            gap: 4rem;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: 3rem;
+            font-weight: 400;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gris);
+            margin-top: 0.5rem;
+        }
+
+        /* ===== PRODUCTS SECTION ===== */
+        .products-section {
+            padding: 10rem 4rem;
+            background: var(--noir-profond);
+            position: relative;
+        }
+
+
+
+        .section-header {
+            max-width: 1400px;
+            margin: 0 auto 6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-title-group h2 {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 400;
+            margin-top: 1rem;
+        }
+
+        .view-all {
+            color: var(--rouge);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: gap 0.3s ease;
+        }
+
+        .view-all:hover {
+            gap: 1.5rem;
+        }
+
+        .products-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .product-card {
+            position: relative;
+            text-decoration: none;
+            color: var(--blanc);
+        }
+
+        .product-image {
+            aspect-ratio: 3/4;
+            background: var(--noir-light);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 60%, var(--noir-profond));
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .product-card:hover .product-image::before {
+            opacity: 1;
+        }
+
+        .product-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            z-index: 3;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .product-card:hover .product-overlay {
+            transform: translateY(0);
+        }
+
+        .product-overlay button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--rouge);
+            border: none;
+            color: var(--blanc);
+            font-family: 'Javanese Text', Georgia, serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .product-overlay button:hover {
+            background: var(--blanc);
+            color: var(--noir);
+        }
+
+        .product-tag {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--rouge);
+            color: var(--blanc);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            z-index: 4;
+        }
+
+        .product-info {
+            padding: 0 0.5rem;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gris);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-name {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .product-card:hover .product-name {
+            color: var(--rouge);
+        }
+
+        .product-price {
+            font-size: 1rem;
+        }
+
+        .product-price .format {
+            color: var(--gris);
+            font-size: 0.8rem;
+        }
+
+        /* ===== CATEGORIES SECTION ===== */
+        .categories-section {
+            padding: 10rem 4rem;
+            background: var(--noir);
+        }
+
+        .categories-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--blanc);
+        }
+
+        .category-card img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: grayscale(30%);
+        }
+
+        .category-card:hover img {
+            transform: scale(1.1);
+            filter: grayscale(0%);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 20%, var(--noir-profond) 100%);
+            z-index: 2;
+        }
+
+        .category-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            opacity: 0.6;
+            transition: opacity 0.6s ease;
+            z-index: 3;
+        }
+
+        .category-card:hover::after {
+            opacity: 0.8;
+        }
+
+        .category-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            z-index: 5;
+        }
+
+        .category-number {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: 4rem;
+            font-weight: 400;
+            opacity: 0.2;
+            line-height: 1;
+            margin-bottom: 1rem;
+            transition: opacity 0.4s ease;
+        }
+
+        .category-card:hover .category-number {
+            opacity: 0.4;
+        }
+
+        .category-name {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-count {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gris);
+            transition: color 0.4s ease;
+        }
+
+        .category-card:hover .category-count {
+            color: var(--blanc);
+        }
+
+        .category-arrow {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            transform: rotate(-45deg);
+            transition: all 0.4s ease;
+        }
+
+        .category-card:hover .category-arrow {
+            background: var(--blanc);
+            border-color: var(--blanc);
+            transform: rotate(0deg);
+        }
+
+        .category-card:hover .category-arrow i {
+            color: var(--noir);
+        }
+
+
+
+        /* ===== INSTAGRAM SECTION ===== */
+        .instagram-section {
+            padding: 10rem 4rem;
+            background: var(--noir);
+        }
+
+        .instagram-header {
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+            text-align: center;
+        }
+
+        .instagram-title {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .instagram-handle {
+            color: var(--rouge);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+        }
+
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+        }
+
+        .insta-item {
+            aspect-ratio: 1;
+            background: var(--noir-light);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .insta-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .insta-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .insta-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--rouge);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 2;
+        }
+
+        .insta-item:hover::before {
+            opacity: 0.8;
+        }
+
+        .insta-item i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 1.5rem;
+            color: var(--blanc);
+            z-index: 3;
+            transition: transform 0.4s ease;
+        }
+
+        .insta-item:hover i {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* ===== CONTACT CTA ===== */
+        .contact-cta {
+            padding: 12rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: var(--noir);
+        }
+
+
+
+        .cta-title {
+            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 400;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-text {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--gris-clair);
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 6rem 4rem 3rem;
+            background: var(--noir-profond);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            padding-right: 2rem;
+        }
+
+        .footer-logo {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            text-decoration: none;
+        }
+
+        .footer-logo img {
+            height: 50px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .footer-brand p {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--gris);
+            line-height: 1.8;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .footer-social a {
+            width: 45px;
+            height: 45px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blanc);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background: var(--rouge);
+            border-color: var(--rouge);
+        }
+
+        .footer-column h4 {
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            color: var(--rouge);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-column ul a {
+            color: var(--gris);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 300;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul a:hover {
+            color: var(--rouge);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 4rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            font-size: 0.85rem;
+            color: var(--gris);
+        }
+
+        .footer-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--gris);
+        }
+
+        .footer-location i {
+            color: var(--rouge);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            #globe-container {
+                width: 50%;
+            }
+
+            .globe-overlay {
+                width: 50%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            header {
+                padding: 1.5rem 2rem;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 100%;
+                height: 100vh;
+                background: var(--noir-profond);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                transition: right 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.5rem;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+
+            .about-container {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+
+            .about-visual {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .instagram-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .globe-wrapper {
+                height: 60vh;
+                min-height: 400px;
+                max-height: 600px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .about-section,
+            .products-section,
+            .categories-section,
+            .instagram-section,
+            .contact-cta,
+            .globe-section {
+                padding: 5rem 2rem;
+            }
+
+            .globe-wrapper {
+                height: 50vh;
+                min-height: 300px;
+                max-height: 450px;
+            }
+
+            .globe-title {
+                font-size: 2rem;
+            }
+
+            .globe-description {
+                font-size: 1rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-social {
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .instagram-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            body {
+                cursor: auto;
+            }
+
+            .hero-content {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Noise Overlay -->
+    <div class="noise"></div>
+
+    <!-- Paillettes flottantes -->
+    <div class="sparkles-container" id="sparkles"></div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-particles" id="loaderParticles"></div>
+        <div class="loader-text">
+            <span style="animation-delay: 0.1s" class="red-letter">Z</span><span
+                style="animation-delay: 0.15s">E</span><span style="animation-delay: 0.2s">D</span><span
+                style="animation-delay: 0.35s"> </span><span style="animation-delay: 0.4s">W</span><span
+                style="animation-delay: 0.45s">O</span><span style="animation-delay: 0.5s">R</span><span
+                style="animation-delay: 0.55s">L</span><span style="animation-delay: 0.6s" class="red-letter">D</span>
+        </div>
+        <div class="loader-line"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo">
+            <img src="assets/LOGO A4.svg" alt="ZED WORLD">
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="active">Accueil</a></li>
+            <li><a href="boutique.html">Boutique</a></li>
+            <li><a href="pro.html">Pro</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="menu-btn" id="menuBtn">
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+
+
+        <div class="hero-content hero-content-centered">
+            <p class="hero-label">Dessins & Inspirations — Zed World</p>
+            <h1 class="hero-title">
+                <span class="line"><span>Bienvenue dans</span></span>
+                <span class="line"><span>mon</span></span>
+                <span class="line"><span class="gold-text">univers</span></span>
+            </h1>
+            <p class="hero-subtitle">
+                Des illustrations à l'encre qui capturent l'essence des lieux,
+                des atmosphères et des moments de vie à travers le monde.
+            </p>
+            <div class="hero-cta">
+                <a href="catalogue.html" class="btn btn-primary">Découvrir la boutique</a>
+                <a href="#globe" class="btn btn-outline">Explorer le monde</a>
+            </div>
+        </div>
+        <a href="#globe" class="scroll-indicator">
+            <div class="scroll-arrow">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+        </a>
+    </section>
+
+    <!-- Globe Section -->
+    <section class="globe-section" id="globe">
+        <div class="globe-section-content">
+            <div class="globe-text">
+                <span class="section-label">Zed World</span>
+                <h2 class="globe-title">Un monde,<br /><span class="gold-text">une vision</span></h2>
+                <p class="globe-description">
+                    Découvrez un univers artistique unique qui capture l'essence des lieux
+                    et des moments de vie à travers le monde. Chaque œuvre raconte une histoire.
+                </p>
+                <a href="catalogue.html" class="btn btn-primary">Voir les œuvres</a>
+            </div>
+            <div class="globe-wrapper">
+                <div id="globe-container"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee-section">
+        <div class="marquee">
+            <div class="marquee-content">
+                <span class="marquee-item">Papier 100% Recyclé</span>
+                <span class="marquee-item">Dessins à l'encre</span>
+                <span class="marquee-item">Fait à la Réunion</span>
+                <span class="marquee-item">Toiles Canvas</span>
+                <span class="marquee-item">Formats Personnalisés</span>
+                <span class="marquee-item">Papier 100% Recyclé</span>
+                <span class="marquee-item">Dessins à l'encre</span>
+                <span class="marquee-item">Fait à la Réunion</span>
+                <span class="marquee-item">Toiles Canvas</span>
+                <span class="marquee-item">Formats Personnalisés</span>
+            </div>
+            <div class="marquee-content">
+                <span class="marquee-item">Papier 100% Recyclé</span>
+                <span class="marquee-item">Dessins à l'encre</span>
+                <span class="marquee-item">Fait à la Réunion</span>
+                <span class="marquee-item">Toiles Canvas</span>
+                <span class="marquee-item">Formats Personnalisés</span>
+                <span class="marquee-item">Papier 100% Recyclé</span>
+                <span class="marquee-item">Dessins à l'encre</span>
+                <span class="marquee-item">Fait à la Réunion</span>
+                <span class="marquee-item">Toiles Canvas</span>
+                <span class="marquee-item">Formats Personnalisés</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="about-container">
+            <div class="about-visual">
+                <div class="about-image about-image-1">
+                    <img src="assets/IMG-20251008-WA0045.jpg" alt="Zed au travail" loading="lazy">
+                </div>
+                <div class="about-image about-image-2">
+                    <img src="assets/IMG-20251008-WA0036.jpg" alt="Œuvres de Zed" loading="lazy">
+                </div>
+                <div class="about-frame"></div>
+            </div>
+            <div class="about-content">
+                <span class="section-label">À propos de Zed</span>
+                <h2 class="about-title">L'artiste qui dessine<br />l'âme de la Réunion</h2>
+                <p class="about-text">
+                    Zed débarque à la Réunion en 1989. Après des études d'architecture puis les Beaux-Arts,
+                    il enseigne les arts appliqués et plastiques. Depuis plus de vingt ans, ses illustrations
+                    à l'encre capturent l'essence de l'île — ses paysages, ses scènes de vie, ses petits
+                    bonheurs familiaux.
+                </p>
+                <p class="about-text">
+                    Réalisés au Rotring, ses dessins sont imprimés sur du papier Keyboard Calcaire 100% recyclé.
+                    Chaque œuvre est une invitation à contempler la beauté de la Réunion sous un regard unique.
+                </p>
+                <div class="about-stats">
+                    <div class="stat">
+                        <span class="stat-number gold-text">20+</span>
+                        <span class="stat-label">Années de création</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number gold-text">150+</span>
+                        <span class="stat-label">Œuvres uniques</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number gold-text">100%</span>
+                        <span class="stat-label">Papier recyclé</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="section-header">
+            <div class="section-title-group">
+                <span class="section-label">Nouveautés</span>
+                <h2>Les dernières créations</h2>
+            </div>
+            <a href="catalogue.html" class="view-all">
+                Voir tout <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="products-grid">
+            <a href="produit.html" class="product-card">
+                <div class="product-image">
+                    <img src="assets/EDEN BOURBON.jpg" alt="Eden Bourbon" loading="lazy">
+                    <div class="product-overlay">
+                        <button>Voir le produit</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Papier Recyclé</span>
+                    <h4 class="product-name">Eden Bourbon</h4>
+                    <p class="product-price"><span class="gold-text">46,08€</span> <span class="format">/ 32×45</span>
+                    </p>
+                </div>
+            </a>
+            <a href="produit.html" class="product-card">
+                <div class="product-image">
+                    <span class="product-tag">Nouveau</span>
+                    <img src="assets/JACARANDA.jpg" alt="Jacaranda" loading="lazy">
+                    <div class="product-overlay">
+                        <button>Voir le produit</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Papier Recyclé</span>
+                    <h4 class="product-name">Jacaranda</h4>
+                    <p class="product-price"><span class="gold-text">46,08€</span> <span class="format">/ 32×45</span>
+                    </p>
+                </div>
+            </a>
+            <a href="produit.html" class="product-card">
+                <div class="product-image">
+                    <img src="assets/TAÏBIT.jpg" alt="Direction Taïbit" loading="lazy">
+                    <div class="product-overlay">
+                        <button>Voir le produit</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Toile Panoramique</span>
+                    <h4 class="product-name">Direction Taïbit</h4>
+                    <p class="product-price"><span class="gold-text">119,82€</span> <span class="format">/ 33×95</span>
+                    </p>
+                </div>
+            </a>
+            <a href="produit.html" class="product-card">
+                <div class="product-image">
+                    <img src="assets/TAKAMAKA.jpg" alt="Takamaka" loading="lazy">
+                    <div class="product-overlay">
+                        <button>Voir le produit</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Papier Recyclé</span>
+                    <h4 class="product-name">Takamaka</h4>
+                    <p class="product-price"><span class="gold-text">46,08€</span> <span class="format">/ 32×45</span>
+                    </p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+        <div class="section-header">
+            <div class="section-title-group">
+                <span class="section-label">Collections</span>
+                <h2>Explorer par format</h2>
+            </div>
+        </div>
+        <div class="categories-grid">
+            <a href="papier-recycle.html" class="category-card">
+                <img src="assets/JACARANDA.jpg" alt="Papier Recyclé" loading="lazy">
+                <div class="category-content">
+                    <span class="category-number">01</span>
+                    <h3 class="category-name">Papier Recyclé</h3>
+                    <span class="category-count">A4 — A3 — Panoramique</span>
+                </div>
+                <div class="category-arrow"><i class="fas fa-arrow-right"></i></div>
+            </a>
+            <a href="toiles.html" class="category-card">
+                <img src="assets/TAÏBIT.jpg" alt="Toiles Canvas" loading="lazy">
+                <div class="category-content">
+                    <span class="category-number">02</span>
+                    <h3 class="category-name">Toiles Canvas</h3>
+                    <span class="category-count">Panoramiques & Grands Formats</span>
+                </div>
+                <div class="category-arrow"><i class="fas fa-arrow-right"></i></div>
+            </a>
+            <a href="art-table.html" class="category-card">
+                <img src="assets/IMG-20251008-WA0023.jpg" alt="Objets & Déco" loading="lazy">
+                <div class="category-content">
+                    <span class="category-number">03</span>
+                    <h3 class="category-name">Objets & Déco</h3>
+                    <span class="category-count">Mugs — Serviettes — Shooters</span>
+                </div>
+                <div class="category-arrow"><i class="fas fa-arrow-right"></i></div>
+            </a>
+        </div>
+    </section>
+
+
+
+    <!-- Instagram Section -->
+    <section class="instagram-section">
+        <div class="instagram-header">
+            <h2 class="instagram-title">Suivez l'aventure</h2>
+            <a href="https://instagram.com" target="_blank" class="instagram-handle">@zed_world_reunion</a>
+        </div>
+        <div class="instagram-grid">
+            <div class="insta-item"><img src="assets/EDEN BOURBON.jpg" alt="Eden Bourbon" loading="lazy"><i
+                    class="fab fa-instagram"></i></div>
+            <div class="insta-item"><img src="assets/IMG-20251008-WA0023.jpg" alt="Zed World" loading="lazy"><i
+                    class="fab fa-instagram"></i></div>
+            <div class="insta-item"><img src="assets/JACARANDA.jpg" alt="Jacaranda" loading="lazy"><i
+                    class="fab fa-instagram"></i></div>
+            <div class="insta-item"><img src="assets/IMG-20251008-WA0050.jpg" alt="Zed World" loading="lazy"><i
+                    class="fab fa-instagram"></i></div>
+            <div class="insta-item"><img src="assets/TAKAMAKA.jpg" alt="Takamaka" loading="lazy"><i
+                    class="fab fa-instagram"></i></div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="contact-cta">
+        <span class="section-label">Formats personnalisés</span>
+        <h2 class="cta-title">Un projet sur mesure ?<br /><span class="gold-text">Contactez-nous.</span></h2>
+        <p class="cta-text">
+            Tous les dessins sont disponibles en grand format ou en papier peint.
+            Envoyez-nous votre demande pour un devis personnalisé.
+        </p>
+        <a href="contact.html" class="btn btn-primary">Nous contacter</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="footer-logo">
+                    <img src="assets/LOGO A4.svg" alt="ZED WORLD">
+                </a>
+                <p>
+                    Dessins & Inspirations de l'île de la Réunion.
+                    Des créations uniques imprimées sur papier 100% recyclé.
+                </p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Boutique</h4>
+                <ul>
+                    <li><a href="papier-recycle.html">Papier Recyclé</a></li>
+                    <li><a href="toiles.html">Toiles Canvas</a></li>
+                    <li><a href="art-table.html">Objets & Déco</a></li>
+                    <li><a href="catalogue.html">Tout voir</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informations</h4>
+                <ul>
+                    <li><a href="#">Livraison</a></li>
+                    <li><a href="#">Retours</a></li>
+                    <li><a href="cgv.html">CGV</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="contact.html">Formulaire</a></li>
+                    <li><a href="mailto:direction@zed-world.com">direction@zed-world.com</a></li>
+                    <li><a href="tel:+262692040140">+262 692 040 140</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Zed World. Tous droits réservés.</p>
+            <span class="footer-location">
+                <i class="fas fa-map-marker-alt"></i> Île de la Réunion
+            </span>
+        </div>
+    </footer>
+
+    <script>
+        // ===== GLOBE 3D AVEC THREE.JS =====
+        let scene, camera, renderer, globe;
+        let isGlobeReady = false;
+
+        function initGlobe() {
+            const container = document.getElementById('globe-container');
+            if (!container) return;
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            // Scene
+            scene = new THREE.Scene();
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.z = 12;
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Lumières
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 3, 5);
+            scene.add(directionalLight);
+
+            // Point light doré pour les paillettes
+            const goldLight = new THREE.PointLight(0xd4af37, 0.5, 10);
+            goldLight.position.set(-3, 2, 3);
+            scene.add(goldLight);
+
+            // Créer le globe
+            createGlobe();
+
+            // Créer les étoiles/paillettes en arrière-plan
+            createStars();
+
+            // Animation
+            animate();
+
+            // Resize handler
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function createGlobe() {
+            const loader = new THREE.GLTFLoader();
+
+            loader.load('assets/globe_zed_world.glb', function (gltf) {
+                globe = gltf.scene;
+
+                // 1. Center the model
+                const box = new THREE.Box3().setFromObject(globe);
+                const center = box.getCenter(new THREE.Vector3());
+                globe.position.sub(center);
+
+                // 2. Normalize Scale to Radius ~ 1
+                const size = new THREE.Vector3();
+                box.getSize(size);
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scaleFactor = 2 / maxDim;
+                globe.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+                const wrapper = new THREE.Group();
+                scene.add(wrapper);
+
+                wrapper.add(globe);
+
+                // Ocean Sphere - Solid Interior
+                // Radius 0.99 to tightly fill the interior without Z-fighting
+                const oceanMesh = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.99, 64, 64),
+                    new THREE.MeshStandardMaterial({
+                        color: 0x2A80B9, // Vibrant Blue
+                        roughness: 0.9,  // Matte finish
+                        metalness: 0.0,
+                        side: THREE.FrontSide // Solid sphere
+                    })
+                );
+                wrapper.add(oceanMesh);
+
+                // SCALE THE ENTIRE WRAPPER
+                wrapper.scale.set(4, 4, 4);
+
+                // Update reference
+                const oldGlobeRef = globe;
+                globe = wrapper;
+
+                // Load Texture
+                const textureLoader = new THREE.TextureLoader();
+                const mapTexture = textureLoader.load('assets/CARTE NEGATIF ZED WORLD-3.webp');
+                mapTexture.flipY = false; // Fix UV deformation/orientation
+                mapTexture.colorSpace = THREE.SRGBColorSpace;
+                mapTexture.anisotropy = renderer.capabilities.maxAnisotropy; // Sharpness
+
+                // Improve materials of the land details
+                oldGlobeRef.traverse((child) => {
+                    if (child.isMesh) {
+                        // Apply PBR Material with Texture
+                        child.material = new THREE.MeshStandardMaterial({
+                            map: mapTexture,
+                            color: 0xffffff, // White to show texture colors
+                            roughness: 0.9,  // Matte
+                            metalness: 0.0,
+                            transparent: true, // Enable transparency for the map alpha
+                            alphaTest: 0.5,    // Sharp edges, solves Z-sorting with inner sphere
+                            side: THREE.DoubleSide
+                        });
+                    }
+                });
+
+                isGlobeReady = true;
+
+            }, undefined, function (error) {
+                console.error('An error happened loading the globe:', error);
+            });
+        }
+
+        function createStars() {
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsMaterial = new THREE.PointsMaterial({
+                color: 0xd4af37,
+                size: 0.02,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const starsVertices = [];
+            for (let i = 0; i < 1000; i++) {
+                const x = (Math.random() - 0.5) * 20;
+                const y = (Math.random() - 0.5) * 20;
+                const z = (Math.random() - 0.5) * 20;
+                starsVertices.push(x, y, z);
+            }
+
+            starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
+            const stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (globe) {
+                // Rotation lente du globe
+                globe.rotation.y += 0.002;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('globe-container');
+            if (!container) return;
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        }
+
+        // Interaction souris avec le globe
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        document.getElementById('globe-container')?.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging || !globe) return;
+
+            const deltaMove = {
+                x: e.clientX - previousMousePosition.x,
+                y: e.clientY - previousMousePosition.y
+            };
+
+            globe.rotation.y += deltaMove.x * 0.005;
+            globe.rotation.x += deltaMove.y * 0.005;
+
+            // Limiter la rotation verticale
+            globe.rotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, globe.rotation.x));
+
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // ===== PAILLETTES FLOTTANTES =====
+        function createSparkles() {
+            const container = document.getElementById('sparkles');
+            const sparkleCount = 30;
+
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                sparkle.style.animationDelay = Math.random() * 10 + 's';
+                sparkle.style.width = (Math.random() * 3 + 1) + 'px';
+                sparkle.style.height = sparkle.style.width;
+                container.appendChild(sparkle);
+            }
+        }
+
+        // ===== PARTICULES DU LOADER =====
+        function createLoaderParticles() {
+            const container = document.getElementById('loaderParticles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'loader-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // ===== LOADER =====
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+
+            // Check if loader has already been shown in this session
+            if (sessionStorage.getItem('loaderShown')) {
+                loader.style.display = 'none';
+                createSparkles();
+                initGlobe();
+                return;
+            }
+
+            // If first visit, show loader
+            createLoaderParticles();
+            createSparkles();
+            initGlobe();
+
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    // Set flag in session storage
+                    sessionStorage.setItem('loaderShown', 'true');
+                }, 1000);
+            }, 2500);
+        });
+
+        // ===== CUSTOM CURSOR =====
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 50);
+        });
+
+        // Cursor hover effects
+        const hoverElements = document.querySelectorAll('a, button, .product-card, .category-card, .insta-item');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // ===== MOBILE MENU =====
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuBtn.classList.toggle('active');
+        });
+
+        // ===== SCROLL ANIMATIONS =====
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.product-card, .category-card, .about-content, .about-visual').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px)';
+            el.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            observer.observe(el);
+        });
+
+        // ===== PARALLAX EFFECT ON SCROLL =====
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const parallaxLines = document.querySelectorAll('.parallax-line');
+                    parallaxLines.forEach((line, i) => {
+                        const speed = i === 0 ? 0.5 : -0.5;
+                        line.style.transform = `translateX(${scrolled * speed}px)`;
+                    });
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // ===== SMOOTH SCROLL FOR ANCHOR LINKS =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ===== NAVBAR SCROLL EFFECT =====
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+    </script>
+</body>
+
+</html>

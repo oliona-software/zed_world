@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Boutique - ZED WORLD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== STYLES IMPORTÉS DE INDEX.HTML ===== */
+        /* POLICES */
+        @font-face {
+            font-family: 'Old Press';
+            src: url('fonts/OldPress-Normal.woff2') format('woff2'),
+                url('fonts/OldPress-Normal.woff') format('woff'),
+                url('fonts/OldPress-Normal.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'A Bit Sketchy';
+            src: url('fonts/ABitSketchy.woff2') format('woff2'),
+                url('fonts/ABitSketchy.woff') format('woff'),
+                url('fonts/ABitSketchy.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Javanese Text';
+            src: url('fonts/JavaneseText.woff2') format('woff2'),
+                url('fonts/JavaneseText.woff') format('woff'),
+                url('fonts/JavaneseText.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --noir: #1d1d1b;
+            --noir-profond: #1d1d1b;
+            --noir-light: #2a2a28;
+            --noir-medium: #252523;
+            --rouge: #c6332c;
+            --rouge-dark: #9a2520;
+            --blanc: #ffffff;
+            --blanc-casse: #f5f5f5;
+            --gris: #6a6a6a;
+            --gris-clair: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Javanese Text', Georgia, serif;
+            background-color: var(--noir);
+            color: var(--blanc);
+            overflow-x: hidden;
+        }
+
+        /* UTILS */
+        .gold-text {
+            background: linear-gradient(135deg, #d4af37 0%, #f0e68c 25%, #d4af37 50%, #ffd700 75%, #d4af37 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* NOISE */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: normal;
+            background: rgba(15, 15, 14, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--blanc);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a.active {
+            color: var(--rouge);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--blanc);
+            transition: width 0.4s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .menu-btn span {
+            width: 35px;
+            height: 1px;
+            background: var(--blanc);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--noir-profond);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--blanc);
+            padding: 4rem 4rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-brand p {
+            color: var(--gris-clair);
+            margin: 1.5rem 0;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-social a {
+            color: var(--blanc);
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            color: var(--rouge);
+        }
+
+        .footer-column h4 {
+            font-family: 'Old Press', 'A Bit Sketchy', serif;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--blanc);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-column ul li a {
+            color: var(--gris-clair);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: #d4af37;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+            color: var(--gris);
+        }
+
+        /* ===== BOUTIQUE SPECIFIC STYLES ===== */
+        .shop-hero {
+            padding: 12rem 4rem 4rem;
+            text-align: center;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+        }
+
+        .shop-title {
+            font-family: 'Old Press', 'A Bit Sketchy', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            margin-bottom: 1rem;
+        }
+
+        .shop-subtitle {
+            color: var(--gris-clair);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .shop-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 4rem;
+            padding: 2rem 4rem 6rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* FILTERS SIDEBAR */
+        .filters {
+            position: sticky;
+            top: 150px;
+            height: fit-content;
+        }
+
+        .filter-group {
+            margin-bottom: 2.5rem;
+        }
+
+        .filter-title {
+            font-family: 'Old Press', serif;
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--rouge);
+            border-bottom: 1px solid rgba(198, 51, 44, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .filter-list {
+            list-style: none;
+        }
+
+        .filter-item {
+            margin-bottom: 1rem;
+            cursor: pointer;
+            color: var(--gris-clair);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        .filter-item:hover,
+        .filter-item.selected,
+        .filter-item.expanded {
+            color: var(--blanc);
+            padding-left: 10px;
+        }
+
+        .filter-item.selected {
+            color: #d4af37;
+            font-weight: 600;
+        }
+
+        .sub-filters {
+            margin-left: 1.5rem;
+            margin-top: 0.8rem;
+            display: none;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding-left: 1rem;
+        }
+
+        .filter-item.expanded+.sub-filters {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .sub-filter-item {
+            margin-bottom: 0.6rem;
+            font-size: 0.9rem;
+            color: var(--gris);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .sub-filter-item:hover,
+        .sub-filter-item.selected {
+            color: var(--blanc);
+        }
+
+        .sub-filter-item.selected {
+            color: #d4af37;
+        }
+
+        /* PRODUCT GRID */
+        .products-grid-shop {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 3rem;
+        }
+
+        .product-card {
+            display: block;
+            text-decoration: none;
+            group: 1;
+        }
+
+        .product-image {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+
+        .product-overlay button {
+            background: var(--blanc);
+            color: var(--noir);
+            border: none;
+            padding: 1rem 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-overlay button {
+            transform: translateY(0);
+        }
+
+        .product-info {
+            text-align: center;
+        }
+
+        .product-category {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gris);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--blanc);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1rem;
+            color: var(--gris-clair);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .shop-container {
+                grid-template-columns: 1fr;
+                padding: 2rem;
+            }
+
+            .filters {
+                position: relative;
+                top: 0;
+                margin-bottom: 3rem;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 2rem;
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+
+            .filter-group {
+                min-width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 100%;
+                height: 100vh;
+                background: var(--noir-profond);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.6s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-social {
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-animate {
+            opacity: 0;
+            animation: fadeUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Noise Overlay -->
+    <div class="noise"></div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo">
+            <img src="assets/LOGO A4.svg" alt="ZED WORLD">
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="boutique.html" class="active">Boutique</a></li>
+            <li><a href="pro.html">Pro</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="menu-btn" id="menuBtn">
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Shop Hero -->
+    <section class="shop-hero">
+        <h1 class="shop-title hero-animate"><span class="gold-text">La Collection</span></h1>
+        <p class="shop-subtitle hero-animate" style="animation-delay: 0.2s;">Explorez nos créations uniques, inspirées
+            par l'âme de la Réunion. Impressions fines,
+            toiles et objets d'art.</p>
+    </section>
+
+    <!-- Main Shop Container -->
+    <div class="shop-container">
+        <!-- Sidebar Filters -->
+        <aside class="filters">
+            <div class="filter-group">
+                <h3 class="filter-title">Catégories</h3>
+                <ul class="filter-list">
+                    <li class="filter-item selected" onclick="filterBy('all', this)">Tout voir</li>
+
+                    <li class="filter-item" onclick="toggleSub(this)">
+                        Papier Recyclé
+                    </li>
+                    <ul class="sub-filters">
+                        <li class="sub-filter-item" onclick="filterBy('recycle-a4', this)">Format A4</li>
+                        <li class="sub-filter-item" onclick="filterBy('recycle-a3', this)">Format A3+</li>
+                        <li class="sub-filter-item" onclick="filterBy('recycle-pano', this)">Panoramique</li>
+                    </ul>
+
+                    <li class="filter-item" onclick="filterBy('toiles', this)">Toiles</li>
+
+                    <li class="filter-item" onclick="toggleSub(this)">
+                        Toiles Extérieures
+                    </li>
+                    <ul class="sub-filters">
+                        <li class="sub-filter-item" onclick="filterBy('ext-80x120', this)">80 x 120</li>
+                        <li class="sub-filter-item" onclick="filterBy('ext-80x175', this)">80 x 175</li>
+                    </ul>
+
+                    <li class="filter-item" onclick="toggleSub(this)">
+                        Textiles
+                    </li>
+                    <ul class="sub-filters">
+                        <li class="sub-filter-item" onclick="filterBy('textile-tshirt-homme', this)">T-Shirts Homme</li>
+                        <li class="sub-filter-item" onclick="filterBy('textile-tshirt-femme', this)">T-Shirts Femme</li>
+                        <li class="sub-filter-item" onclick="filterBy('textile-serviette', this)">Serviettes de Plage
+                        </li>
+                    </ul>
+
+                    <li class="filter-item" onclick="filterBy('art-table', this)">Art de la Table</li>
+                    <li class="filter-item" onclick="filterBy('indispensables', this)">Les Indispensables</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <main class="products-grid-shop" id="productGrid">
+            <!-- JS WILL POPULATE THIS -->
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="footer-logo">
+                    <img src="assets/LOGO A4.svg" alt="ZED WORLD" style="height: 40px; margin-bottom: 1rem;">
+                </a>
+                <p>Dessins & Inspirations de l'île de la Réunion. Des créations uniques imprimées sur papier 100%
+                    recyclé.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Boutique</h4>
+                <ul>
+                    <li><a href="#" onclick="filterBy('recycle-a4', null); window.scrollTo(0,0)">Papier Recyclé</a></li>
+                    <li><a href="#" onclick="filterBy('toiles', null); window.scrollTo(0,0)">Toiles Canvas</a></li>
+                    <li><a href="#" onclick="filterBy('art-table', null); window.scrollTo(0,0)">Objets & Déco</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informations</h4>
+                <ul>
+                    <li><a href="#">Livraison</a></li>
+                    <li><a href="#">Retours</a></li>
+                    <li><a href="cgv.html">CGV</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="contact.html">Formulaire</a></li>
+                    <li><a href="mailto:direction@zed-world.com">direction@zed-world.com</a></li>
+                    <li><a href="tel:+262692040140">+262 692 040 140</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Zed World. Tous droits réservés.</p>
+            <span class="footer-location"><i class="fas fa-map-marker-alt"></i> Île de la Réunion</span>
+        </div>
+    </footer>
+
+    <script>
+        // MOCK DATA GENERATED FROM ASSETS
+        const products = [
+            // PAPIER RECYCLE
+            { id: 1, title: 'Eden Bourbon', category: 'recycle-a4', price: '46,08€', image: 'assets/EDEN BOURBON.jpg' },
+            { id: 2, title: 'Jacaranda', category: 'recycle-a3', price: '52,00€', image: 'assets/JACARANDA.jpg' },
+            { id: 3, title: 'Takamaka', category: 'recycle-pano', price: '65,00€', image: 'assets/TAKAMAKA.jpg' },
+            { id: 4, title: 'Taïbit', category: 'recycle-pano', price: '65,00€', image: 'assets/TAÏBIT.jpg' },
+
+            // TOILES (Generic Arts 1-10)
+            { id: 5, title: 'Bassin des Aigrettes', category: 'toiles', price: '120,00€', image: 'assets/art1.png' },
+            { id: 6, title: 'Cirque de Mafate', category: 'toiles', price: '120,00€', image: 'assets/art2.jpg' },
+            { id: 7, title: 'Piton de la Fournaise', category: 'toiles', price: '120,00€', image: 'assets/art3.png' },
+            { id: 8, title: 'Plage de l\'Ermitage', category: 'toiles', price: '120,00€', image: 'assets/art4.png' },
+            { id: 9, title: 'Cascade Grand Galet', category: 'toiles', price: '120,00€', image: 'assets/art5.png' },
+
+            // TOILES EXTERIEURES (Generic Arts 11-15)
+            { id: 10, title: 'Jardin des Parfums', category: 'ext-80x120', price: '180,00€', image: 'assets/art6.png' },
+            { id: 11, title: 'Route du Volcan', category: 'ext-80x175', price: '250,00€', image: 'assets/art7.png' },
+            { id: 12, title: 'Forêt de Bébour', category: 'ext-80x120', price: '180,00€', image: 'assets/art8.png' },
+
+            // TEXTILES (Updated Categories)
+            { id: 13, title: 'T-Shirt "La Buse" (H)', category: 'textile-tshirt-homme', price: '35,00€', image: 'assets/art9.png' },
+            { id: 14, title: 'Serviette Lagon', category: 'textile-serviette', price: '45,00€', image: 'assets/art10.png' },
+            { id: 15, title: 'T-Shirt "Dodo" (F)', category: 'textile-tshirt-femme', price: '35,00€', image: 'assets/art11.png' },
+
+            // ART DE LA TABLE (IMG Files)
+            { id: 16, title: 'Set de Table Tropical', category: 'art-table', price: '25,00€', image: 'assets/IMG-20251008-WA0023.jpg' },
+            { id: 17, title: 'Mug Piton des Neiges', category: 'art-table', price: '15,00€', image: 'assets/IMG-20251008-WA0036.jpg' },
+            { id: 18, title: 'Dessous de Verre', category: 'art-table', price: '12,00€', image: 'assets/IMG-20251008-WA0050.jpg' },
+
+            // INDISPENSABLES
+            { id: 19, title: 'Stylo Plume', category: 'indispensables', price: '8,00€', image: 'assets/art12.jpg' },
+            { id: 20, title: 'Carnet de Voyage', category: 'indispensables', price: '18,00€', image: 'assets/art13.png' },
+            { id: 21, title: 'Carte Postale', category: 'indispensables', price: '2,50€', image: 'assets/art14.png' }
+        ];
+
+        // ADD MORE ASSETS AUTOMATICALLY DISTRIBUTED (MOCKING)
+        const moreAssets = [
+            'art15.png', 'art16.png', 'art17.png', 'art18.jpg', 'art19.png', 'art20.png',
+            'art21.png', 'art22.jpg', 'art23.jpg', 'art24.png', 'art25.png', 'art26.png',
+            'art27.jpg', 'art28.jpg', 'art29.jpg', 'art30.jpg', 'art31.jpg', 'art32.jpg'
+        ];
+
+        let idCounter = 22;
+        moreAssets.forEach((file, index) => {
+            const categories = ['recycle-a4', 'toiles', 'ext-80x120', 'textile-tshirt-homme', 'textile-tshirt-femme', 'art-table'];
+            const randomCat = categories[index % categories.length];
+            products.push({
+                id: idCounter++,
+                title: `Création #${idCounter}`,
+                category: randomCat,
+                price: '45,00€',
+                image: `assets/${file}`
+            });
+        });
+
+        // DOM ELEMENTS
+        const grid = document.getElementById('productGrid');
+
+        // INITIAL RENDER
+        renderProducts(products);
+
+        function renderProducts(items) {
+            grid.innerHTML = items.map(product => `
+                <a href="#" class="product-card">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.title}" loading="lazy">
+                        <div class="product-overlay">
+                            <button>Voir détail</button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">${formatCategory(product.category)}</span>
+                        <h4 class="product-name">${product.title}</h4>
+                        <p class="product-price"><span class="gold-text">${product.price}</span></p>
+                    </div>
+                </a>
+            `).join('');
+
+            // Re-attach observer to new elements
+            setTimeout(observeElements, 50); // Small delay to ensure DOM update
+        }
+
+        function formatCategory(cat) {
+            const map = {
+                'recycle-a4': 'Papier Recyclé A4',
+                'recycle-a3': 'Papier Recyclé A3',
+                'recycle-pano': 'Papier Panoramique',
+                'toiles': 'Toile Canvas',
+                'ext-80x120': 'Toile Ext. 80x120',
+                'ext-80x175': 'Toile Ext. 80x175',
+                'textile-tshirt-homme': 'T-Shirt Homme',
+                'textile-tshirt-femme': 'T-Shirt Femme',
+                'textile-serviette': 'Serviette',
+                'art-table': 'Art de la Table',
+                'indispensables': 'Indispensable'
+            };
+            return map[cat] || 'Collection ZED';
+        }
+
+        function filterBy(category, element) {
+            // UI State Management
+            if (element) {
+                // 1. Remove .selected from ALL
+                document.querySelectorAll('.filter-item, .sub-filter-item').forEach(el => el.classList.remove('selected'));
+
+                // 2. Add .selected to clicked
+                element.classList.add('selected');
+
+                // 3. Handle Parent Expansion consistency
+                // If it's a sub-item, expand its parent
+                if (element.classList.contains('sub-filter-item')) {
+                    const parentUl = element.parentElement; // .sub-filters
+                    if (parentUl.classList.contains('sub-filters')) {
+                        const parentHeader = parentUl.previousElementSibling; // .filter-item (header)
+                        if (parentHeader) {
+                            parentHeader.classList.add('expanded');
+                        }
+                    }
+                }
+            }
+
+            // Filter Logic
+            if (category === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderProducts(filtered);
+            }
+        }
+
+        function toggleSub(element) {
+            // Keep current expanded state
+            const wasExpanded = element.classList.contains('expanded');
+
+            // Close all expanded items (Accordion style)
+            document.querySelectorAll('.filter-item').forEach(el => el.classList.remove('expanded'));
+
+            // Toggle clicked
+            if (!wasExpanded) {
+                element.classList.add('expanded');
+            }
+        }
+
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // ===== SCROLL ANIMATIONS =====
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        // Function to observe elements (called on load and after filtering)
+        function observeElements() {
+            document.querySelectorAll('.product-card, .filter-group').forEach(el => {
+                if (!el.classList.contains('reveal')) {
+                    el.classList.add('reveal');
+                    observer.observe(el);
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', observeElements);
+    </script>
+</body>
+
+</html>

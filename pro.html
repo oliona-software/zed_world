@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Pro - ZED WORLD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== STYLES IMPORTÉS DE INDEX.HTML & BOUTIQUE.HTML ===== */
+        /* POLICES */
+        @font-face {
+            font-family: 'Old Press';
+            src: url('fonts/OldPress-Normal.woff2') format('woff2'),
+                url('fonts/OldPress-Normal.woff') format('woff'),
+                url('fonts/OldPress-Normal.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'A Bit Sketchy';
+            src: url('fonts/ABitSketchy.woff2') format('woff2'),
+                url('fonts/ABitSketchy.woff') format('woff'),
+                url('fonts/ABitSketchy.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Javanese Text';
+            src: url('fonts/JavaneseText.woff2') format('woff2'),
+                url('fonts/JavaneseText.woff') format('woff'),
+                url('fonts/JavaneseText.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --noir: #1d1d1b;
+            --noir-profond: #1d1d1b;
+            --noir-light: #2a2a28;
+            --rouge: #c6332c;
+            --blanc: #ffffff;
+            --gris: #6a6a6a;
+            --gris-clair: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Javanese Text', Georgia, serif;
+            background-color: var(--noir);
+            color: var(--blanc);
+            overflow-x: hidden;
+        }
+
+        /* UTILS */
+        .gold-text {
+            background: linear-gradient(135deg, #d4af37 0%, #f0e68c 25%, #d4af37 50%, #ffd700 75%, #d4af37 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* NOISE */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 15, 14, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--blanc);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a.active {
+            color: var(--rouge);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--blanc);
+            transition: width 0.4s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .menu-btn span {
+            width: 35px;
+            height: 1px;
+            background: var(--blanc);
+        }
+
+        /* HERO PRO */
+        .pro-hero {
+            padding: 12rem 4rem 6rem;
+            text-align: center;
+            background: radial-gradient(circle at 50% 50%, rgba(198, 51, 44, 0.05) 0%, transparent 70%);
+        }
+
+        .pro-title {
+            font-family: 'Old Press', 'A Bit Sketchy', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .pro-subtitle {
+            color: var(--gris-clair);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* SERVICES SECTION */
+        .services-section {
+            padding: 4rem 4rem 8rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(212, 175, 55, 0.3);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--rouge);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .service-title {
+            font-family: 'Old Press', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--blanc);
+        }
+
+        .service-desc {
+            color: var(--gris);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* PORTFOLIO GRID */
+        .portfolio-section {
+            padding: 4rem 4rem 8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Old Press', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .portfolio-item {
+            position: relative;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* CTA SECTION */
+        .cta-section {
+            padding: 8rem 4rem;
+            text-align: center;
+            background: linear-gradient(to top, rgba(15, 15, 14, 1), rgba(29, 29, 27, 0));
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .cta-title {
+            font-family: 'Old Press', serif;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--rouge);
+            color: var(--blanc);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-family: 'Javanese Text', serif;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn:hover {
+            background: #d4af37;
+            color: var(--noir);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--noir-profond);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--blanc);
+            padding: 4rem 4rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-brand p {
+            color: var(--gris-clair);
+            margin: 1.5rem 0;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-social a {
+            color: var(--blanc);
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            color: var(--rouge);
+        }
+
+        .footer-column h4 {
+            font-family: 'Old Press', 'A Bit Sketchy', serif;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--blanc);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-column ul li a {
+            color: var(--gris-clair);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: #d4af37;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+            color: var(--gris);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .pro-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 100%;
+                height: 100vh;
+                background: var(--noir-profond);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.6s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-social {
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Noise Overlay -->
+    <div class="noise"></div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo">
+            <img src="assets/LOGO A4.svg" alt="ZED WORLD">
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="boutique.html">Boutique</a></li>
+            <li><a href="pro.html" class="active">Pro</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="menu-btn" id="menuBtn">
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pro-hero">
+        <h1 class="pro-title">Le Studio <span class="gold-text">Graphique</span></h1>
+        <p class="pro-subtitle">
+            Donnez vie à vos idées avec notre expertise créative.
+            Identité visuelle, illustration sur mesure et design de supports authentiques.
+        </p>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-pen-nib service-icon"></i>
+                <h3 class="service-title">Branding & Identité</h3>
+                <p class="service-desc">
+                    Création de logos, chartes graphiques et univers de marque uniques qui racontent votre histoire avec
+                    élégance et caractère.
+                </p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-paint-brush service-icon"></i>
+                <h3 class="service-title">Illustration Artiste</h3>
+                <p class="service-desc">
+                    Dessins originaux, illustrations faites main et digital painting pour vos projets d'édition, textile
+                    ou décoration.
+                </p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-layer-group service-icon"></i>
+                <h3 class="service-title">Support Print & Web</h3>
+                <p class="service-desc">
+                    Mise en page de brochures, affiches, packagings et visuels pour les réseaux sociaux, alliant
+                    esthétique et impact.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section (Mock) -->
+    <section class="portfolio-section">
+        <div class="section-header">
+            <h2 class="section-title">Nos Réalisations</h2>
+            <p style="color:var(--gris-clair)">Un aperçu de notre savoir-faire</p>
+        </div>
+        <div class="portfolio-grid">
+            <!-- Using existing assets as placeholder for design work -->
+            <div class="portfolio-item">
+                <img src="assets/EDEN BOURBON.jpg" alt="Projet Graphisme">
+            </div>
+            <div class="portfolio-item">
+                <img src="assets/JACARANDA.jpg" alt="Projet Graphisme">
+            </div>
+            <div class="portfolio-item">
+                <img src="assets/TAKAMAKA.jpg" alt="Projet Graphisme">
+            </div>
+            <div class="portfolio-item">
+                <img src="assets/art1.png" alt="Projet Graphisme">
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2 class="cta-title">Vous avez un <span class="gold-text">Projet ?</span></h2>
+        <p style="color:var(--gris-clair); margin-bottom: 3rem; max-width: 600px; margin-left:auto; margin-right:auto;">
+            Discutons de vos besoins et créons ensemble une identité visuelle qui vous ressemble.
+        </p>
+        <a href="contact.html" class="cta-btn">Contactez le Studio</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="footer-logo">
+                    <img src="assets/LOGO A4.svg" alt="ZED WORLD" style="height: 40px; margin-bottom: 1rem;">
+                </a>
+                <p>Dessins & Inspirations de l'île de la Réunion. Des créations uniques imprimées sur papier 100%
+                    recyclé.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Boutique</h4>
+                <ul>
+                    <li><a href="boutique.html">Papier Recyclé</a></li>
+                    <li><a href="boutique.html">Toiles Canvas</a></li>
+                    <li><a href="boutique.html">Objets & Déco</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informations</h4>
+                <ul>
+                    <li><a href="#">Livraison</a></li>
+                    <li><a href="#">Retours</a></li>
+                    <li><a href="cgv.html">CGV</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="contact.html">Formulaire</a></li>
+                    <li><a href="mailto:direction@zed-world.com">direction@zed-world.com</a></li>
+                    <li><a href="tel:+262692040140">+262 692 040 140</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Zed World. Tous droits réservés.</p>
+            <span class="footer-location"><i class="fas fa-map-marker-alt"></i> Île de la Réunion</span>
+        </div>
+    </footer>
+
+    <script>
+        // Hamburger Menu Logic
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+
+            // Animate hamburger lines
+            const spans = menuBtn.querySelectorAll('span');
+            if (navLinks.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 6px)';
+                spans[1].style.transform = 'rotate(-45deg) translate(5px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.transform = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

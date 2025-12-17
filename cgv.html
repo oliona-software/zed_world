@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGV - ZED WORLD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== POLICES PERSONNALISÉES ===== */
+        @font-face {
+            font-family: 'Old Press';
+            src: url('fonts/OldPress-Normal.woff2') format('woff2'),
+                url('fonts/OldPress-Normal.woff') format('woff'),
+                url('fonts/OldPress-Normal.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'A Bit Sketchy';
+            src: url('fonts/ABitSketchy.woff2') format('woff2'),
+                url('fonts/ABitSketchy.woff') format('woff'),
+                url('fonts/ABitSketchy.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Javanese Text';
+            src: url('fonts/JavaneseText.woff2') format('woff2'),
+                url('fonts/JavaneseText.woff') format('woff'),
+                url('fonts/JavaneseText.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --noir: #1d1d1b;
+            --noir-profond: #1d1d1b;
+            --noir-light: #2a2a28;
+            --noir-medium: #252523;
+            --rouge: #c6332c;
+            --rouge-dark: #9a2520;
+            --blanc: #ffffff;
+            --blanc-casse: #f5f5f5;
+            --gris: #6a6a6a;
+            --gris-clair: #a0a0a0;
+            --or: #d4af37;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Javanese Text', Georgia, serif;
+            background-color: var(--noir);
+            color: var(--blanc);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ===== COMMON ===== */
+        .gold-text {
+            background: linear-gradient(135deg, #d4af37 0%, #f0e68c 25%, #d4af37 50%, #ffd700 75%, #d4af37 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--noir-profond);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .loader.hidden {
+            animation: loaderFadeOut 1s ease forwards;
+        }
+
+        @keyframes loaderFadeOut {
+            100% {
+                clip-path: inset(0 0 100% 0);
+            }
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--blanc);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 0.5rem 0;
+            font-family: 'Javanese Text', Georgia, serif;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--blanc);
+            transition: width 0.4s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--rouge);
+        }
+
+        .nav-links a.active::after {
+            background: var(--rouge);
+        }
+
+        .menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .menu-btn span {
+            width: 35px;
+            height: 1px;
+            background: var(--blanc);
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            padding: 12rem 4rem 4rem;
+            text-align: center;
+            position: relative;
+            background: var(--noir);
+        }
+
+        .page-title {
+            font-family: 'Old Press', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            color: var(--gris);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--gris);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover,
+        .breadcrumb .current {
+            color: var(--rouge);
+        }
+
+        /* ===== CGV CONTENT ===== */
+        .cgv-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem;
+        }
+
+        .cgv-section {
+            margin-bottom: 4rem;
+        }
+
+        .cgv-section h2 {
+            font-family: 'Old Press', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--blanc);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        .cgv-block {
+            margin-bottom: 3rem;
+        }
+
+        .cgv-block h3 {
+            font-size: 1.5rem;
+            color: var(--rouge);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        .cgv-text {
+            color: var(--gris-clair);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .payment-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .payment-list li {
+            color: var(--gris-clair);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .payment-list li::before {
+            content: '•';
+            color: var(--rouge);
+        }
+
+        /* Footer */
+        footer {
+            padding: 6rem 4rem 3rem;
+            background: var(--noir-profond);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-logo img {
+            height: 50px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .footer-brand p {
+            color: var(--gris);
+            line-height: 1.8;
+            margin-top: 1rem;
+        }
+
+        .footer-column h4 {
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            color: var(--rouge);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul a {
+            color: var(--gris);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column ul a:hover {
+            color: var(--rouge);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+            margin-top: 4rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--gris);
+            font-size: 0.85rem;
+        }
+
+        @media(max-width: 992px) {
+            .cgv-container {
+                padding: 2rem;
+            }
+
+            .nav-links {
+                position: fixed;
+                right: -100%;
+                top: 0;
+                height: 100vh;
+                background: var(--noir-profond);
+                flex-direction: column;
+                justify-content: center;
+                width: 100%;
+                transition: right 0.5s ease;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="noise"></div>
+    <div class="loader" id="loader">...</div>
+
+    <header>
+        <a href="index.html" class="logo"><img src="assets/LOGO A4.svg" alt="ZED WORLD"></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="catalogue.html">Boutique</a></li>
+            <li><a href="pro.html">Pro</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="menu-btn" id="menuBtn"><span></span><span></span></div>
+    </header>
+
+    <section class="page-header">
+        <h1 class="page-title">Conditions Générales <span class="gold-text">de Vente</span></h1>
+        <div class="breadcrumb">
+            <a href="index.html">Accueil</a>
+            <span>/</span>
+            <span class="current">CGV</span>
+        </div>
+    </section>
+
+    <div class="cgv-container">
+        <!-- Politique de Boutique -->
+        <section class="cgv-section">
+            <h2>Politique de Boutique</h2>
+
+            <div class="cgv-block">
+                <h3>Service Client</h3>
+                <p class="cgv-text">
+                    Section de service client. Présentez votre entreprise et vos services, et indiquez comment contacter
+                    la boutique en cas de problème. Rédigez une politique de service client détaillée afin d'établir une
+                    relation de confiance avec vos clients et leur permettre d'acheter sereinement sur votre site.
+                </p>
+                <p class="cgv-text">
+                    Second paragraphe de la section de service client. Cliquez sur « Modifier le texte » ou
+                    double-cliquez ici pour ajouter des détails sur votre politique et personnaliser la police. C'est
+                    l'espace idéal pour relater votre parcours et présenter votre activité à vos visiteurs.
+                </p>
+            </div>
+
+            <div class="cgv-block">
+                <h3>Confidentialité et Sécurité</h3>
+                <p class="cgv-text">
+                    Politique de sécurité et de confidentialité. Informez vos clients sur la façon dont vous utilisez,
+                    stockez et protégez leurs informations personnelles. Ajoutez des détails sur la vérification des
+                    paiements par des services tiers, le processus de collecte des données ou le délai de prise de
+                    contact avec le client après un achat.
+                </p>
+                <p class="cgv-text">
+                    La confidentialité de vos utilisateurs est de la plus haute importance pour votre entreprise. Prenez
+                    le temps de rédiger une politique précise et détaillée. Privilégiez un langage simple qui inspirera
+                    confiance à votre clientèle.
+                </p>
+            </div>
+
+            <div class="cgv-block">
+                <h3>Demandes de Vente en Gros</h3>
+                <p class="cgv-text">
+                    Section de demandes de vente en gros. Informez vos détaillants sur les conditions de revente de vos
+                    articles. Utilisez un langage clair et fournissez toutes les informations nécessaires pour
+                    promouvoir et développer votre entreprise.
+                </p>
+                <p class="cgv-text">
+                    Second paragraphe de la section de vente en gros. Vous pouvez le modifier et ajouter votre propre
+                    texte. Cliquez sur « Modifier le texte » ou double-cliquez ici pour ajouter votre contenu et
+                    personnaliser la police. C'est l'espace idéal pour relater votre parcours et vous présenter à vos
+                    visiteurs.
+                </p>
+            </div>
+        </section>
+
+        <!-- Moyens de Paiement -->
+        <section class="cgv-section">
+            <h2>Moyens de Paiement</h2>
+            <div class="cgv-block">
+                <ul class="payment-list">
+                    <li>Cartes de crédit/débit</li>
+                    <li>Paypal</li>
+                    <li>Paiements hors ligne</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="footer-logo"><img src="assets/LOGO A4.svg" alt="ZED WORLD"></a>
+                <p>Dessins & Inspirations de l'île de la Réunion.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Boutique</h4>
+                <ul>
+                    <li><a href="#">Papier Recyclé</a></li>
+                    <li><a href="#">Toiles Canvas</a></li>
+                    <li><a href="#">Tout voir</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informations</h4>
+                <ul>
+                    <li><a href="#">Livraison</a></li>
+                    <li><a href="cgv.html">CGV</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="contact.html">Formulaire</a></li>
+                    <li><a href="mailto:boutique@zed-world.com">boutique@zed-world.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Zed World.</p>
+            <p>Made in La Réunion</p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => { setTimeout(() => { document.getElementById('loader').classList.add('hidden'); }, 800); });
+
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+        menuBtn.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+    </script>
+</body>
+
+</html>
