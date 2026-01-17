@@ -9,10 +9,8 @@
     <style>
         /* ===== POLICES PERSONNALISÉES ===== */
         @font-face {
-            font-family: 'Old Press';
-            src: url('fonts/OldPress-Normal.woff2') format('woff2'),
-                url('fonts/OldPress-Normal.woff') format('woff'),
-                url('fonts/OldPress-Normal.ttf') format('truetype');
+            font-family: 'TOP_SECRET';
+            src: url('fonts/top_secret_no_bar.woff') format('woff');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -49,7 +47,7 @@
             --blanc-casse: #f5f5f5;
             --gris: #6a6a6a;
             --gris-clair: #a0a0a0;
-            --or: #d4af37;
+            --or: #c6332c;
         }
 
         * {
@@ -72,12 +70,8 @@
 
         /* ===== COMMON ===== */
         .gold-text {
-            background: linear-gradient(135deg, #d4af37 0%, #f0e68c 25%, #d4af37 50%, #ffd700 75%, #d4af37 100%);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmer 3s ease-in-out infinite;
+            color: var(--rouge);
+            text-shadow: 0 0 30px rgba(198, 51, 44, 0.3);
         }
 
         @keyframes shimmer {

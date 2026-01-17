@@ -9,10 +9,8 @@
     <style>
         /* ===== POLICES PERSONNALISÉES ===== */
         @font-face {
-            font-family: 'Old Press';
-            src: url('fonts/OldPress-Normal.woff2') format('woff2'),
-                url('fonts/OldPress-Normal.woff') format('woff'),
-                url('fonts/OldPress-Normal.ttf') format('truetype');
+            font-family: 'TOP_SECRET';
+            src: url('fonts/top_secret_no_bar.woff') format('woff');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -40,7 +38,7 @@
 
         :root {
             --noir: #1d1d1b;
-            --noir-profond: #0f0f0e;
+            --noir-profond: #1d1d1b;
             --noir-light: #2a2a28;
             --noir-medium: #252523;
             --rouge: #c6332c;
@@ -49,7 +47,7 @@
             --blanc-casse: #f5f5f5;
             --gris: #6a6a6a;
             --gris-clair: #a0a0a0;
-            --or: #d4af37;
+            --or: #c6332c;
         }
 
         /* ===== ANIMATIONS ===== */
@@ -112,11 +110,11 @@
             width: 100%;
             height: 100%;
             background-image:
-                radial-gradient(1px 1px at 20px 30px, #d4af37, transparent),
-                radial-gradient(1px 1px at 40px 70px, #ffd700, transparent),
-                radial-gradient(0.5px 0.5px at 90px 40px, #f0e68c, transparent),
-                radial-gradient(1px 1px at 130px 80px, #d4af37, transparent),
-                radial-gradient(0.5px 0.5px at 160px 30px, #ffd700, transparent);
+                radial-gradient(1px 1px at 20px 30px, #c6332c, transparent),
+                radial-gradient(1px 1px at 40px 70px, #9a2520, transparent),
+                radial-gradient(0.5px 0.5px at 90px 40px, #c6332c, transparent),
+                radial-gradient(1px 1px at 130px 80px, #9a2520, transparent),
+                radial-gradient(0.5px 0.5px at 160px 30px, #c6332c, transparent);
             background-size: 200px 100px;
             animation: sparkle 4s ease-in-out infinite;
             pointer-events: none;
@@ -135,18 +133,8 @@
         }
 
         .gold-text {
-            background: linear-gradient(135deg,
-                    #d4af37 0%,
-                    #f0e68c 25%,
-                    #d4af37 50%,
-                    #ffd700 75%,
-                    #d4af37 100%);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmer 3s ease-in-out infinite;
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            color: var(--rouge);
+            text-shadow: 0 0 30px rgba(198, 51, 44, 0.3);
         }
 
         @keyframes shimmer {
@@ -255,6 +243,53 @@
         .nav-links a.active::after {
             width: 100%;
             background: var(--rouge);
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-left: 2rem;
+            position: relative;
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--blanc);
+            color: var(--blanc);
+            font-family: 'Javanese Text', serif;
+            font-size: 0.9rem;
+            padding: 0.3rem 0;
+            width: 200px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'A Bit Sketchy', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .search-input:focus {
+            border-bottom-color: var(--rouge);
+            width: 250px;
+        }
+
+        .search-icon {
+            margin-left: -20px;
+            color: var(--blanc);
+            pointer-events: none;
+        }
+
+        header.header-scrolled .search-input {
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        header.header-scrolled .search-input:focus {
+            border-bottom-color: var(--rouge);
         }
 
         .menu-btn {
@@ -368,7 +403,7 @@
         /* ===== PAGE HEADER ===== */
         .page-header {
             padding: 12rem 4rem 6rem;
-            background: var(--noir-profond);
+            background: var(--noir);
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -393,10 +428,11 @@
             left: 0;
             width: 100%;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(198, 51, 44, 0.3), transparent);
         }
 
         .section-label {
+            font-family: 'A Bit Sketchy', sans-serif;
             font-size: 0.75rem;
             letter-spacing: 0.4em;
             text-transform: uppercase;
@@ -410,7 +446,7 @@
         }
 
         .page-title {
-            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-family: 'TOP_SECRET', 'A Bit Sketchy', Georgia, serif;
             font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 400;
             line-height: 1;
@@ -482,8 +518,7 @@
         }
 
         .info-card-title {
-            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
-            /* New font */
+            font-family: 'A Bit Sketchy', Georgia, serif;
             font-size: 1.5rem;
             font-weight: 400;
             letter-spacing: 0.1em;
@@ -517,7 +552,7 @@
         }
 
         .social-section h3 {
-            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-family: 'A Bit Sketchy', Georgia, serif;
             font-size: 1.5rem;
             font-weight: 400;
             margin-bottom: 2rem;
@@ -567,7 +602,7 @@
         }
 
         .form-header h2 {
-            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-family: 'A Bit Sketchy', Georgia, serif;
             font-size: 2.5rem;
             font-weight: 400;
             margin-bottom: 1rem;
@@ -636,7 +671,7 @@
         .form-select {
             cursor: pointer;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6,9 12,15 18,9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23c6332c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6,9 12,15 18,9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 0 center;
             background-size: 16px;
@@ -737,7 +772,7 @@
         }
 
         .section-title {
-            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-family: 'A Bit Sketchy', Georgia, serif;
             font-size: 3rem;
             font-weight: 400;
             margin-bottom: 1rem;
@@ -760,7 +795,7 @@
         }
 
         .faq-item:hover {
-            border-color: rgba(212, 175, 55, 0.3);
+            border-color: rgba(198, 51, 44, 0.3);
         }
 
         .faq-question {
@@ -792,20 +827,25 @@
         .faq-answer {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease;
+            transition: max-height 0.4s ease, padding 0.4s ease;
         }
 
         .faq-item.active .faq-answer {
-            max-height: 300px;
+            max-height: 500px;
         }
 
         .faq-answer p {
-            padding: 0 2rem 2rem;
+            padding: 0;
             color: var(--gris-clair);
             line-height: 1.8;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 0;
+            transition: padding 0.4s ease;
+        }
+
+        .faq-item.active .faq-answer p {
+            padding: 1.5rem 2rem 2rem;
             margin-top: 0;
-            padding-top: 1.5rem;
         }
 
         /* ===== FOOTER ===== */
@@ -965,9 +1005,8 @@
     <!-- Noise Overlay -->
     <div class="noise"></div>
 
-
-
-
+    <!-- Floating Sparkles -->
+    <div class="sparkles-container" id="sparkles"></div>
 
     <!-- Header -->
     <header>
@@ -976,10 +1015,14 @@
         </a>
         <ul class="nav-links" id="navLinks">
             <li><a href="index.html">Accueil</a></li>
-            <li><a href="catalogue.html">Boutique</a></li>
+            <li><a href="boutique.html">Boutique</a></li>
             <li><a href="pro.html">Pro</a></li>
             <li><a href="contact.html" class="active">Contact</a></li>
         </ul>
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Rechercher...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
         <div class="menu-btn" id="menuBtn">
             <span></span>
             <span></span>
@@ -989,7 +1032,7 @@
     <!-- Page Header -->
     <section class="page-header">
         <span class="section-label">Restons en ligne</span>
-        <h1 class="page-title">Contactez <span class="gold-text">l'atelier</span></h1>
+        <h1 class="page-title">CONTACTEZ <span class="gold-text">L'ATELIER</span></h1>
         <p class="page-subtitle">Pour toute question sur les œuvres, les commandes sur mesure ou les collaborations,
             n'hésitez pas à nous écrire.</p>
     </section>
@@ -1033,7 +1076,7 @@
             </div>
         </div>
 
-        <div class="contact-form-container">
+        <div class="contact-form-container" id="contact-form">
             <div class="form-header">
                 <h2>Envoyez-nous un message</h2>
                 <p>Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</p>
@@ -1114,7 +1157,7 @@
     </section>
 
     <!-- FAQ Section -->
-    <section class="faq-section">
+    <section class="faq-section" id="faq">
         <div class="section-header">
             <h2 class="section-title">Questions <span class="gold-text">Fréquentes</span></h2>
             <p class="page-subtitle">Les réponses aux questions les plus courantes sur nos œuvres et livraisons.</p>
@@ -1126,8 +1169,10 @@
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                    <p>Pour la Réunion, comptez 3 à 5 jours ouvrés. Pour la France métropolitaine, les délais sont de 7
-                        à 10 jours ouvrés. Chaque commande est emballée avec soin pour garantir une protection optimale.
+                    <p>Pour la Réunion, comptez 3 à 5 jours ouvrés. Pour la France métropolitaine, les délais sont de
+                        7
+                        à 10 jours ouvrés. Chaque commande est emballée avec soin pour garantir une protection opt
+                        i male.
                     </p>
                 </div>
             </div>
@@ -1138,7 +1183,8 @@
                 </div>
                 <div class="faq-answer">
                     <p>Oui, absolument ! Nous pouvons imprimer sur différents supports (papier 100% recyclé, toiles
-                        canvas, papier peint) et dans des dimensions personnalisées. Contactez-nous via le formulaire
+                        canvas, papier peint) et dans des dimensions personnalisées. Contactez-nous via le for
+                        mulaire
                         pour un devis.</p>
                 </div>
             </div>
@@ -1148,7 +1194,8 @@
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                    <p>Nos tirages papier sont vendus sans cadre pour faciliter l'expédition et vous laisser le choix du
+                    <p>Nos tirages papier sont vendus sans cadre pour faciliter l'expédition et vous laisser le cho
+                        ix du
                         style. Les toiles canvas sont montées sur châssis bois et prêtes à accrocher.</p>
                 </div>
             </div>
@@ -1236,7 +1283,17 @@
         document.querySelectorAll('.faq-question').forEach(item => {
             item.addEventListener('click', () => {
                 const parent = item.parentElement;
-                parent.classList.toggle('active');
+                const isCurrentlyActive = parent.classList.contains('active');
+
+                // Fermer tous les autres éléments FAQ
+                document.querySelectorAll('.faq-item').forEach(faqItem => {
+                    faqItem.classList.remove('active');
+                });
+
+                // Si l'élément n'était pas actif, l'ouvrir
+                if (!isCurrentlyActive) {
+                    parent.classList.add('active');
+                }
             });
         });
 
@@ -1265,6 +1322,35 @@
             });
         });
 
+        // Check for pro type in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('type') === 'pro') {
+            const proOption = Array.from(startTypeOptions).find(opt => opt.querySelector('input').value === 'pro');
+            if (proOption) {
+                proOption.click();
+            }
+        }
+
+        // ===== PAILLETTES FLOTTANTES =====
+        function createSparkles() {
+            const container = document.getElementById('sparkles');
+            const sparkleCount = 30;
+
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                sparkle.style.animationDelay = Math.random() * 10 + 's';
+                sparkle.style.width = (Math.random() * 3 + 1) + 'px';
+                sparkle.style.height = sparkle.style.width;
+                container.appendChild(sparkle);
+            }
+        }
+
+        // Create sparkles on page load
+        createSparkles();
+
         // ===== SCROLL ANIMATIONS =====
         const observerOptions = {
             threshold: 0.1,
@@ -1280,7 +1366,7 @@
         }, observerOptions);
 
         // Observe elements
-        document.querySelectorAll('.info-card, .social-section, .contact-form-container, .faq-item').forEach(el => {
+        document.querySelectorAll('.info-card, .social-section, .contact-form-container').forEach(el => {
             el.classList.add('reveal');
             observer.observe(el);
         });

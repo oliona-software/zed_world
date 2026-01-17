@@ -10,10 +10,8 @@
         /* ===== STYLES IMPORTÉS DE INDEX.HTML & BOUTIQUE.HTML ===== */
         /* POLICES */
         @font-face {
-            font-family: 'Old Press';
-            src: url('fonts/OldPress-Normal.woff2') format('woff2'),
-                url('fonts/OldPress-Normal.woff') format('woff'),
-                url('fonts/OldPress-Normal.ttf') format('truetype');
+            font-family: 'TOP_SECRET';
+            src: url('fonts/top_secret_no_bar.woff') format('woff');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -68,12 +66,8 @@
 
         /* UTILS */
         .gold-text {
-            background: linear-gradient(135deg, #d4af37 0%, #f0e68c 25%, #d4af37 50%, #ffd700 75%, #d4af37 100%);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmer 3s ease-in-out infinite;
+            color: var(--rouge);
+            text-shadow: 0 0 30px rgba(198, 51, 44, 0.3);
         }
 
         @keyframes shimmer {
@@ -103,6 +97,48 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
 
+        /* ===== PAILLETTES FLOTTANTES ===== */
+        .sparkles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #d4af37;
+            border-radius: 50%;
+            animation: float-sparkle linear infinite;
+            box-shadow: 0 0 6px #d4af37;
+        }
+
+        @keyframes float-sparkle {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-10vh) rotate(720deg);
+            }
+        }
+
         /* HEADER */
         header {
             position: fixed;
@@ -114,8 +150,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(15, 15, 14, 0.95);
+            mix-blend-mode: difference;
+            transition: all 0.4s ease;
+        }
+
+        header.header-scrolled {
+            background: rgba(15, 15, 14, 0.85);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1rem 4rem;
+            mix-blend-mode: normal;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -146,6 +190,7 @@
             text-transform: uppercase;
             position: relative;
             padding: 0.5rem 0;
+            font-family: 'Javanese Text', Georgia, serif;
         }
 
         .nav-links a.active {
@@ -160,11 +205,58 @@
             width: 0;
             height: 1px;
             background: var(--blanc);
-            transition: width 0.4s ease;
+            transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .nav-links a:hover::after {
             width: 100%;
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-left: 2rem;
+            position: relative;
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--blanc);
+            color: var(--blanc);
+            font-family: 'Javanese Text', serif;
+            font-size: 0.9rem;
+            padding: 0.3rem 0;
+            width: 200px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'A Bit Sketchy', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .search-input:focus {
+            border-bottom-color: var(--rouge);
+            width: 250px;
+        }
+
+        .search-icon {
+            margin-left: -20px;
+            color: var(--blanc);
+            pointer-events: none;
+        }
+
+        header.header-scrolled .search-input {
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        header.header-scrolled .search-input:focus {
+            border-bottom-color: var(--rouge);
         }
 
         .menu-btn {
@@ -184,11 +276,20 @@
         .pro-hero {
             padding: 12rem 4rem 6rem;
             text-align: center;
-            background: radial-gradient(circle at 50% 50%, rgba(198, 51, 44, 0.05) 0%, transparent 70%);
+            position: relative;
+        }
+
+        /* SECTION SEPARATOR */
+        .section-separator {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(198, 51, 44, 0.3), transparent);
+            position: relative;
+            z-index: 2;
         }
 
         .pro-title {
-            font-family: 'Old Press', 'A Bit Sketchy', serif;
+            font-family: 'TOP_SECRET', 'A Bit Sketchy', serif;
             font-size: clamp(3rem, 6vw, 5rem);
             margin-bottom: 1.5rem;
             line-height: 1.1;
@@ -200,6 +301,26 @@
             margin: 0 auto 3rem;
             font-size: 1.2rem;
             line-height: 1.6;
+        }
+
+        /* SECTION LABEL */
+        .section-label {
+            font-family: 'A Bit Sketchy', Georgia, serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--rouge);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--rouge);
         }
 
         /* SERVICES SECTION */
@@ -226,7 +347,7 @@
 
         .service-card:hover {
             transform: translateY(-10px);
-            border-color: rgba(212, 175, 55, 0.3);
+            border-color: rgba(198, 51, 44, 0.3);
             background: rgba(255, 255, 255, 0.04);
         }
 
@@ -238,7 +359,7 @@
         }
 
         .service-title {
-            font-family: 'Old Press', serif;
+            font-family: 'A Bit Sketchy', Georgia, serif;
             font-size: 1.5rem;
             margin-bottom: 1rem;
             color: var(--blanc);
@@ -253,7 +374,6 @@
         /* PORTFOLIO GRID */
         .portfolio-section {
             padding: 4rem 4rem 8rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .section-header {
@@ -262,7 +382,7 @@
         }
 
         .section-title {
-            font-family: 'Old Press', serif;
+            font-family: 'A Bit Sketchy', Georgia, serif;
             font-size: 2.5rem;
             margin-bottom: 1rem;
         }
@@ -297,12 +417,10 @@
         .cta-section {
             padding: 8rem 4rem;
             text-align: center;
-            background: linear-gradient(to top, rgba(15, 15, 14, 1), rgba(29, 29, 27, 0));
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .cta-title {
-            font-family: 'Old Press', serif;
+            font-family: 'A Bit Sketchy', Georgia, serif;
             font-size: 3rem;
             margin-bottom: 2rem;
         }
@@ -322,54 +440,77 @@
         }
 
         .cta-btn:hover {
-            background: #d4af37;
+            background: var(--rouge);
             color: var(--noir);
         }
 
         /* FOOTER */
         footer {
+            padding: 6rem 4rem 3rem;
             background: var(--noir-profond);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: var(--blanc);
-            padding: 4rem 4rem 2rem;
-            position: relative;
-            z-index: 10;
         }
 
         .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 4rem;
-            margin-bottom: 4rem;
+        }
+
+        .footer-brand {
+            padding-right: 2rem;
+        }
+
+        .footer-logo {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            text-decoration: none;
+        }
+
+        .footer-logo img {
+            height: 50px;
+            width: auto;
+            filter: brightness(0) invert(1);
         }
 
         .footer-brand p {
-            color: var(--gris-clair);
-            margin: 1.5rem 0;
-            line-height: 1.6;
-            max-width: 300px;
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--gris);
+            line-height: 1.8;
         }
 
         .footer-social {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
+            margin-top: 2rem;
         }
 
         .footer-social a {
+            width: 45px;
+            height: 45px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--blanc);
-            font-size: 1.2rem;
-            transition: color 0.3s ease;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
 
         .footer-social a:hover {
-            color: var(--rouge);
+            background: var(--rouge);
+            border-color: var(--rouge);
         }
 
         .footer-column h4 {
-            font-family: 'Old Press', 'A Bit Sketchy', serif;
-            font-size: 1.2rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
             margin-bottom: 2rem;
-            color: var(--blanc);
+            color: var(--rouge);
         }
 
         .footer-column ul {
@@ -380,24 +521,43 @@
             margin-bottom: 1rem;
         }
 
-        .footer-column ul li a {
-            color: var(--gris-clair);
+        .footer-column ul a {
+            color: var(--gris);
             text-decoration: none;
+            font-size: 1rem;
+            font-weight: 300;
             transition: color 0.3s ease;
         }
 
-        .footer-column ul li a:hover {
-            color: #d4af37;
+        .footer-column ul a:hover {
+            color: var(--rouge);
         }
 
         .footer-bottom {
+            max-width: 1400px;
+            margin: 4rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.9rem;
+        }
+
+        .footer-bottom p {
+            font-size: 0.85rem;
             color: var(--gris);
+        }
+
+        .footer-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--gris);
+        }
+
+        .footer-location i {
+            color: var(--rouge);
         }
 
         /* RESPONSIVE */
@@ -460,6 +620,9 @@
     <!-- Noise Overlay -->
     <div class="noise"></div>
 
+    <!-- Paillettes flottantes -->
+    <div class="sparkles-container" id="sparkles"></div>
+
     <!-- Header -->
     <header>
         <a href="index.html" class="logo">
@@ -471,6 +634,11 @@
             <li><a href="pro.html" class="active">Pro</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
+        <!-- Barre de recherche -->
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Rechercher...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
         <div class="menu-btn" id="menuBtn">
             <span></span>
             <span></span>
@@ -479,12 +647,14 @@
 
     <!-- Hero Section -->
     <section class="pro-hero">
-        <h1 class="pro-title">Le Studio <span class="gold-text">Graphique</span></h1>
+        <h1 class="pro-title">LE STUDIO <span class="gold-text">GRAPHIQUE</span></h1>
         <p class="pro-subtitle">
             Donnez vie à vos idées avec notre expertise créative.
             Identité visuelle, illustration sur mesure et design de supports authentiques.
         </p>
     </section>
+
+    <div class="section-separator"></div>
 
     <!-- Services Section -->
     <section class="services-section">
@@ -516,6 +686,8 @@
         </div>
     </section>
 
+    <div class="section-separator"></div>
+
     <!-- Portfolio Section (Mock) -->
     <section class="portfolio-section">
         <div class="section-header">
@@ -539,13 +711,15 @@
         </div>
     </section>
 
+    <div class="section-separator"></div>
+
     <!-- CTA Section -->
     <section class="cta-section">
         <h2 class="cta-title">Vous avez un <span class="gold-text">Projet ?</span></h2>
         <p style="color:var(--gris-clair); margin-bottom: 3rem; max-width: 600px; margin-left:auto; margin-right:auto;">
             Discutons de vos besoins et créons ensemble une identité visuelle qui vous ressemble.
         </p>
-        <a href="contact.html" class="cta-btn">Contactez le Studio</a>
+        <a href="contact.html?type=pro" class="cta-btn">Contactez le Studio</a>
     </section>
 
     <!-- Footer -->
@@ -553,10 +727,12 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <a href="index.html" class="footer-logo">
-                    <img src="assets/LOGO A4.svg" alt="ZED WORLD" style="height: 40px; margin-bottom: 1rem;">
+                    <img src="assets/LOGO A4.svg" alt="ZED WORLD">
                 </a>
-                <p>Dessins & Inspirations de l'île de la Réunion. Des créations uniques imprimées sur papier 100%
-                    recyclé.</p>
+                <p>
+                    Dessins & Inspirations de l'île de la Réunion.
+                    Des créations uniques imprimées sur papier 100% recyclé.
+                </p>
                 <div class="footer-social">
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -566,9 +742,10 @@
             <div class="footer-column">
                 <h4>Boutique</h4>
                 <ul>
-                    <li><a href="boutique.html">Papier Recyclé</a></li>
-                    <li><a href="boutique.html">Toiles Canvas</a></li>
-                    <li><a href="boutique.html">Objets & Déco</a></li>
+                    <li><a href="papier-recycle.html">Papier Recyclé</a></li>
+                    <li><a href="toiles.html">Toiles Canvas</a></li>
+                    <li><a href="art-table.html">Objets & Déco</a></li>
+                    <li><a href="catalogue.html">Tout voir</a></li>
                 </ul>
             </div>
             <div class="footer-column">
@@ -591,11 +768,45 @@
         </div>
         <div class="footer-bottom">
             <p>© 2024 Zed World. Tous droits réservés.</p>
-            <span class="footer-location"><i class="fas fa-map-marker-alt"></i> Île de la Réunion</span>
+            <span class="footer-location">
+                <i class="fas fa-map-marker-alt"></i> Île de la Réunion
+            </span>
         </div>
     </footer>
 
     <script>
+        // ===== PAILLETTES FLOTTANTES =====
+        function createSparkles() {
+            const container = document.getElementById('sparkles');
+            const sparkleCount = 30;
+
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                sparkle.style.animationDelay = Math.random() * 10 + 's';
+                sparkle.style.width = (Math.random() * 3 + 1) + 'px';
+                sparkle.style.height = sparkle.style.width;
+                container.appendChild(sparkle);
+            }
+        }
+
+        // Initialize sparkles on page load
+        window.addEventListener('load', () => {
+            createSparkles();
+        });
+
+        // ===== NAVBAR SCROLL EFFECT =====
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+
         // Hamburger Menu Logic
         const menuBtn = document.getElementById('menuBtn');
         const navLinks = document.getElementById('navLinks');

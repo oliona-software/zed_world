@@ -11,10 +11,8 @@
     <style>
         /* ===== POLICES PERSONNALISÉES ===== */
         @font-face {
-            font-family: 'Old Press';
-            src: url('fonts/OldPress-Normal.woff2') format('woff2'),
-                url('fonts/OldPress-Normal.woff') format('woff'),
-                url('fonts/OldPress-Normal.ttf') format('truetype');
+            font-family: 'TOP_SECRET';
+            src: url('fonts/top_secret_no_bar.woff') format('woff');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -83,11 +81,11 @@
             width: 100%;
             height: 100%;
             background-image:
-                radial-gradient(1px 1px at 20px 30px, #d4af37, transparent),
-                radial-gradient(1px 1px at 40px 70px, #ffd700, transparent),
-                radial-gradient(0.5px 0.5px at 90px 40px, #f0e68c, transparent),
-                radial-gradient(1px 1px at 130px 80px, #d4af37, transparent),
-                radial-gradient(0.5px 0.5px at 160px 30px, #ffd700, transparent);
+                radial-gradient(1px 1px at 20px 30px, #c6332c, transparent),
+                radial-gradient(1px 1px at 40px 70px, #9a2520, transparent),
+                radial-gradient(0.5px 0.5px at 90px 40px, #c6332c, transparent),
+                radial-gradient(1px 1px at 130px 80px, #9a2520, transparent),
+                radial-gradient(0.5px 0.5px at 160px 30px, #c6332c, transparent);
             background-size: 200px 100px;
             animation: sparkle 4s ease-in-out infinite;
             pointer-events: none;
@@ -106,35 +104,11 @@
         }
 
         .gold-text {
-            background: linear-gradient(135deg,
-                    #d4af37 0%,
-                    #f0e68c 25%,
-                    #d4af37 50%,
-                    #ffd700 75%,
-                    #d4af37 100%);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmer 3s ease-in-out infinite;
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            color: var(--rouge);
+            text-shadow: 0 0 30px rgba(198, 51, 44, 0.3);
         }
 
-        @keyframes shimmer {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-
+        /* Removed keyframes shimmer as it is no longer used by gold-text */
 
         /* ===== LOADER ===== */
         .loader {
@@ -152,7 +126,7 @@
         }
 
         .loader-text {
-            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-family: 'TOP_SECRET', 'A Bit Sketchy', Georgia, serif;
             font-size: clamp(2rem, 8vw, 5rem);
             font-weight: 600;
             letter-spacing: 0.5em;
@@ -167,10 +141,7 @@
         }
 
         .loader-text .gold-letter {
-            background: linear-gradient(135deg, #d4af37, #ffd700, #d4af37);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--rouge);
         }
 
         .loader-text .red-letter {
@@ -324,6 +295,54 @@
             width: 100%;
         }
 
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-left: 2rem;
+            position: relative;
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--blanc);
+            color: var(--blanc);
+            font-family: 'Javanese Text', serif;
+            font-size: 0.9rem;
+            padding: 0.3rem 0;
+            width: 200px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'A Bit Sketchy', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .search-input:focus {
+            border-bottom-color: var(--rouge);
+            width: 250px;
+        }
+
+        .search-icon {
+            margin-left: -20px;
+            color: var(--blanc);
+            pointer-events: none;
+        }
+
+        header.header-scrolled .search-input {
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        header.header-scrolled .search-input:focus {
+            border-bottom-color: var(--rouge);
+        }
+
+
         .menu-btn {
             display: none;
             flex-direction: column;
@@ -398,7 +417,7 @@
             left: 0;
             width: 100%;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(198, 51, 44, 0.3), transparent);
         }
 
         .globe-section-content {
@@ -445,6 +464,54 @@
             height: 100%;
         }
 
+        /* Indicateur d'interaction globe */
+        .globe-interaction-hint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+
+        .globe-interaction-hint.hidden {
+            opacity: 0;
+        }
+
+        .globe-hand-icon {
+            font-size: 2.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            animation: hand-drag 2s infinite ease-in-out;
+            text-shadow: 0 0 10px rgba(198, 51, 44, 0.5);
+        }
+
+        .globe-hint-text {
+            font-family: 'Javanese Text', serif;
+            color: var(--blanc);
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes hand-drag {
+
+            0%,
+            100% {
+                transform: translateX(-15px);
+            }
+
+            50% {
+                transform: translateX(15px);
+            }
+        }
+
         /* Points interactifs sur le globe */
         .city-point {
             position: absolute;
@@ -473,8 +540,8 @@
 
         .city-point:hover {
             transform: scale(1.5);
-            background: #d4af37;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+            background: var(--rouge);
+            box-shadow: 0 0 30px rgba(198, 51, 44, 0.8);
         }
 
         @keyframes pulse-point {
@@ -492,7 +559,7 @@
         .city-tooltip {
             position: absolute;
             background: rgba(0, 0, 0, 0.9);
-            border: 1px solid #d4af37;
+            border: 1px solid var(--rouge);
             padding: 1rem 1.5rem;
             border-radius: 4px;
             white-space: nowrap;
@@ -537,7 +604,7 @@
         }
 
         .hero-title {
-            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-family: 'TOP_SECRET', 'A Bit Sketchy', Georgia, serif;
             font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 400;
             line-height: 1;
@@ -646,8 +713,8 @@
         }
 
         .btn-outline:hover {
-            border-color: #d4af37;
-            color: #d4af37;
+            border-color: var(--rouge);
+            color: var(--rouge);
         }
 
         .scroll-indicator {
@@ -753,18 +820,20 @@
 
         .marquee {
             display: flex;
-            animation: marquee 30s linear infinite;
+            width: max-content;
+            animation: marquee 60s linear infinite;
         }
 
         .marquee-content {
             display: flex;
+            flex-shrink: 0;
             gap: 4rem;
             padding-right: 4rem;
             white-space: nowrap;
         }
 
         .marquee-item {
-            font-family: 'Old Press', 'A Bit Sketchy', Georgia, serif;
+            font-family: 'A Bit Sketchy', Georgia, serif;
             font-size: 1.5rem;
             font-weight: 400;
             color: var(--gris);
@@ -772,6 +841,7 @@
             align-items: center;
             gap: 1rem;
         }
+
 
         .marquee-item::before {
             content: '✦';
@@ -867,6 +937,7 @@
         }
 
         .section-label {
+            font-family: 'A Bit Sketchy', Georgia, serif;
             font-size: 0.75rem;
             letter-spacing: 0.4em;
             text-transform: uppercase;
@@ -1652,6 +1723,11 @@
             <li><a href="pro.html">Pro</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
+        <!-- Barre de recherche -->
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Rechercher...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
         <div class="menu-btn" id="menuBtn">
             <span></span>
             <span></span>
@@ -1666,16 +1742,16 @@
         <div class="hero-content hero-content-centered">
             <p class="hero-label">Dessins & Inspirations — Zed World</p>
             <h1 class="hero-title">
-                <span class="line"><span>Bienvenue dans</span></span>
-                <span class="line"><span>mon</span></span>
-                <span class="line"><span class="gold-text">univers</span></span>
+                <span class="line"><span>BIENVENU DANS</span></span>
+                <span class="line"><span>MON</span></span>
+                <span class="line"><span class="gold-text">UNIVERS</span></span>
             </h1>
             <p class="hero-subtitle">
                 Des illustrations à l'encre qui capturent l'essence des lieux,
                 des atmosphères et des moments de vie à travers le monde.
             </p>
             <div class="hero-cta">
-                <a href="catalogue.html" class="btn btn-primary">Découvrir la boutique</a>
+                <a href="boutique.html" class="btn btn-primary">Découvrir la boutique</a>
                 <a href="#globe" class="btn btn-outline">Explorer le monde</a>
             </div>
         </div>
@@ -1698,10 +1774,14 @@
                     Découvrez un univers artistique unique qui capture l'essence des lieux
                     et des moments de vie à travers le monde. Chaque œuvre raconte une histoire.
                 </p>
-                <a href="catalogue.html" class="btn btn-primary">Voir les œuvres</a>
+                <a href="boutique.html" class="btn btn-primary">Voir les œuvres</a>
             </div>
             <div class="globe-wrapper">
                 <div id="globe-container"></div>
+                <div class="globe-interaction-hint" id="globeHint">
+                    <div class="globe-hand-icon"><i class="far fa-hand-pointer"></i></div>
+                    <span class="globe-hint-text">Faites tourner</span>
+                </div>
             </div>
         </div>
     </section>
@@ -1786,7 +1866,7 @@
                 <span class="section-label">Nouveautés</span>
                 <h2>Les dernières créations</h2>
             </div>
-            <a href="catalogue.html" class="view-all">
+            <a href="boutique.html" class="view-all">
                 Voir tout <i class="fas fa-arrow-right"></i>
             </a>
         </div>
@@ -1860,7 +1940,7 @@
             </div>
         </div>
         <div class="categories-grid">
-            <a href="papier-recycle.html" class="category-card">
+            <a href="boutique.html?category=recycle" class="category-card">
                 <img src="assets/JACARANDA.jpg" alt="Papier Recyclé" loading="lazy">
                 <div class="category-content">
                     <span class="category-number">01</span>
@@ -1869,7 +1949,7 @@
                 </div>
                 <div class="category-arrow"><i class="fas fa-arrow-right"></i></div>
             </a>
-            <a href="toiles.html" class="category-card">
+            <a href="boutique.html?category=toiles" class="category-card">
                 <img src="assets/TAÏBIT.jpg" alt="Toiles Canvas" loading="lazy">
                 <div class="category-content">
                     <span class="category-number">02</span>
@@ -1878,7 +1958,7 @@
                 </div>
                 <div class="category-arrow"><i class="fas fa-arrow-right"></i></div>
             </a>
-            <a href="art-table.html" class="category-card">
+            <a href="boutique.html?category=art-table" class="category-card">
                 <img src="assets/IMG-20251008-WA0023.jpg" alt="Objets & Déco" loading="lazy">
                 <div class="category-content">
                     <span class="category-number">03</span>
@@ -2012,7 +2092,7 @@
             scene.add(directionalLight);
 
             // Point light doré pour les paillettes
-            const goldLight = new THREE.PointLight(0xd4af37, 0.5, 10);
+            const goldLight = new THREE.PointLight(0xc6332c, 0.5, 10);
             goldLight.position.set(-3, 2, 3);
             scene.add(goldLight);
 
@@ -2153,6 +2233,7 @@
 
         document.getElementById('globe-container')?.addEventListener('mousedown', (e) => {
             isDragging = true;
+            document.getElementById('globeHint')?.classList.add('hidden');
             previousMousePosition = { x: e.clientX, y: e.clientY };
         });
 
@@ -2214,7 +2295,7 @@
             const loader = document.getElementById('loader');
 
             // Check if loader has already been shown in this session
-            if (sessionStorage.getItem('loaderShown')) {
+            if (localStorage.getItem('loaderShown')) {
                 loader.style.display = 'none';
                 createSparkles();
                 initGlobe();
@@ -2230,8 +2311,8 @@
                 loader.classList.add('hidden');
                 setTimeout(() => {
                     loader.style.display = 'none';
-                    // Set flag in session storage
-                    sessionStorage.setItem('loaderShown', 'true');
+                    // Set flag in local storage
+                    localStorage.setItem('loaderShown', 'true');
                 }, 1000);
             }, 2500);
         });
