@@ -11,7 +11,7 @@
         /* POLICES */
         @font-face {
             font-family: 'TOP_SECRET';
-            src: url('fonts/top_secret_no_bar.woff') format('woff');
+            src: url('fonts/top_secret_no_bar.woff2') format('woff2');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -172,7 +172,7 @@
         .logo img {
             height: 40px;
             width: auto;
-            filter: brightness(0) invert(1);
+            /* filter: brightness(0) invert(1); removed */
         }
 
         .nav-links {
@@ -472,7 +472,7 @@
         .footer-logo img {
             height: 50px;
             width: auto;
-            filter: brightness(0) invert(1);
+            /* filter: brightness(0) invert(1); removed */
         }
 
         .footer-brand p {
@@ -506,6 +506,7 @@
         }
 
         .footer-column h4 {
+            font-family: 'TOP_SECRET', 'A Bit Sketchy', Georgia, serif;
             font-size: 0.8rem;
             letter-spacing: 0.3em;
             text-transform: uppercase;
@@ -730,31 +731,31 @@
                     <img src="assets/LOGO A4.svg" alt="ZED WORLD">
                 </a>
                 <p>
-                    Dessins & Inspirations de l'île de la Réunion.
+                    Dessins & Inspirations du monde entier. <br>
                     Des créations uniques imprimées sur papier 100% recyclé.
                 </p>
                 <div class="footer-social">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://instagram.com/zedworldofficiel/"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/people/Zed-World-Officiel/61581645523146/"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/262693134647"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
             <div class="footer-column">
                 <h4>Boutique</h4>
                 <ul>
-                    <li><a href="papier-recycle.html">Papier Recyclé</a></li>
-                    <li><a href="toiles.html">Toiles Canvas</a></li>
-                    <li><a href="art-table.html">Objets & Déco</a></li>
-                    <li><a href="catalogue.html">Tout voir</a></li>
+                    <li><a href="boutique.html?category=recycle">Papier Recyclé</a></li>
+                    <li><a href="boutique.html?category=toiles">Toiles Canvas</a></li>
+                    <li><a href="boutique.html?category=art-table">Objets & Déco</a></li>
+                    <li><a href="boutique.html">Tout voir</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h4>Informations</h4>
                 <ul>
-                    <li><a href="#">Livraison</a></li>
-                    <li><a href="#">Retours</a></li>
                     <li><a href="cgv.html">CGV</a></li>
-                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="mention-legale.html">Mentions légales</a></li>
+                    <li><a href="politique-confidentialie.html">Politique de confidentialité</a></li>
                 </ul>
             </div>
             <div class="footer-column">
@@ -767,7 +768,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2024 Zed World. Tous droits réservés.</p>
+            <p>© 2026 Zed World. Tous droits réservés.</p>
             <span class="footer-location">
                 <i class="fas fa-map-marker-alt"></i> Île de la Réunion
             </span>

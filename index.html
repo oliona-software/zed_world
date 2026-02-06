@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZED WORLD - Dessins & Inspirations de la Réunion</title>
+    <title>ZED WORLD - Inspirations de la Réunion</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -12,7 +12,7 @@
         /* ===== POLICES PERSONNALISÉES ===== */
         @font-face {
             font-family: 'TOP_SECRET';
-            src: url('fonts/top_secret_no_bar.woff') format('woff');
+            src: url('fonts/top_secret_no_bar.woff2') format('woff2');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -259,7 +259,7 @@
         .logo img {
             height: 40px;
             width: auto;
-            filter: brightness(0) invert(1);
+            /* filter: brightness(0) invert(1); removed to keep logo colors */
         }
 
         .nav-links {
@@ -1449,7 +1449,6 @@
         .footer-logo img {
             height: 50px;
             width: auto;
-            filter: brightness(0) invert(1);
         }
 
         .footer-brand p {
@@ -1740,9 +1739,8 @@
 
 
         <div class="hero-content hero-content-centered">
-            <p class="hero-label">Dessins & Inspirations — Zed World</p>
             <h1 class="hero-title">
-                <span class="line"><span>BIENVENU DANS</span></span>
+                <span class="line"><span>BIENVENUE DANS</span></span>
                 <span class="line"><span>MON</span></span>
                 <span class="line"><span class="gold-text">UNIVERS</span></span>
             </h1>
@@ -1871,7 +1869,7 @@
             </a>
         </div>
         <div class="products-grid">
-            <a href="produit.html" class="product-card">
+            <a href="boutique.html?category=recycle&product=eden-bourbon" class="product-card">
                 <div class="product-image">
                     <img src="assets/EDEN BOURBON.jpg" alt="Eden Bourbon" loading="lazy">
                     <div class="product-overlay">
@@ -1885,7 +1883,7 @@
                     </p>
                 </div>
             </a>
-            <a href="produit.html" class="product-card">
+            <a href="boutique.html?category=recycle&product=jacaranda" class="product-card">
                 <div class="product-image">
                     <span class="product-tag">Nouveau</span>
                     <img src="assets/JACARANDA.jpg" alt="Jacaranda" loading="lazy">
@@ -1900,7 +1898,7 @@
                     </p>
                 </div>
             </a>
-            <a href="produit.html" class="product-card">
+            <a href="boutique.html?category=panoramique&product=taitbit" class="product-card">
                 <div class="product-image">
                     <img src="assets/TAÏBIT.jpg" alt="Direction Taïbit" loading="lazy">
                     <div class="product-overlay">
@@ -1914,7 +1912,7 @@
                     </p>
                 </div>
             </a>
-            <a href="produit.html" class="product-card">
+            <a href="boutique.html?category=recycle&product=takamaka" class="product-card">
                 <div class="product-image">
                     <img src="assets/TAKAMAKA.jpg" alt="Takamaka" loading="lazy">
                     <div class="product-overlay">
@@ -1976,7 +1974,8 @@
     <section class="instagram-section">
         <div class="instagram-header">
             <h2 class="instagram-title">Suivez l'aventure</h2>
-            <a href="https://instagram.com" target="_blank" class="instagram-handle">@zed_world_reunion</a>
+            <a href="https://instagram.com/zedworldofficiel/" target="_blank"
+                class="instagram-handle">@zedworldofficiel</a>
         </div>
         <div class="instagram-grid">
             <div class="insta-item"><img src="assets/EDEN BOURBON.jpg" alt="Eden Bourbon" loading="lazy"><i
@@ -2011,31 +2010,31 @@
                     <img src="assets/LOGO A4.svg" alt="ZED WORLD">
                 </a>
                 <p>
-                    Dessins & Inspirations de l'île de la Réunion.
+                    Dessins & Inspirations du monde entier. <br>
                     Des créations uniques imprimées sur papier 100% recyclé.
                 </p>
                 <div class="footer-social">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/zedworldofficiel/"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/people/Zed-World-Officiel/61581645523146/"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/262693134647"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
             <div class="footer-column">
                 <h4>Boutique</h4>
                 <ul>
-                    <li><a href="papier-recycle.html">Papier Recyclé</a></li>
-                    <li><a href="toiles.html">Toiles Canvas</a></li>
-                    <li><a href="art-table.html">Objets & Déco</a></li>
-                    <li><a href="catalogue.html">Tout voir</a></li>
+                    <li><a href="boutique.html?category=recycle">Papier Recyclé</a></li>
+                    <li><a href="boutique.html?category=toiles">Toiles Canvas</a></li>
+                    <li><a href="boutique.html?category=art-table">Objets & Déco</a></li>
+                    <li><a href="boutique.html">Tout voir</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h4>Informations</h4>
                 <ul>
-                    <li><a href="#">Livraison</a></li>
-                    <li><a href="#">Retours</a></li>
                     <li><a href="cgv.html">CGV</a></li>
-                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="mention-legale.html">Mentions légales</a></li>
+                    <li><a href="politique-confidentialie.html">Politique de confidentialité</a></li>
                 </ul>
             </div>
             <div class="footer-column">
@@ -2048,7 +2047,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2024 Zed World. Tous droits réservés.</p>
+            <p>© 2026 Zed World. Tous droits réservés.</p>
             <span class="footer-location">
                 <i class="fas fa-map-marker-alt"></i> Île de la Réunion
             </span>
