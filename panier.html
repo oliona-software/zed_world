@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio Pro - ZED WORLD</title>
+    <title>Mon Panier - ZED WORLD</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== STYLES IMPORTÉS DE INDEX.HTML & BOUTIQUE.HTML ===== */
+        /* ===== STYLES IMPORTÉS & ADAPTÉS DE BOUTIQUE.HTML ===== */
         /* POLICES */
         @font-face {
             font-family: 'TOP_SECRET';
@@ -41,8 +41,11 @@
             --noir: #1d1d1b;
             --noir-profond: #1d1d1b;
             --noir-light: #2a2a28;
+            --noir-medium: #252523;
             --rouge: #c6332c;
+            --rouge-dark: #9a2520;
             --blanc: #ffffff;
+            --blanc-casse: #f5f5f5;
             --gris: #6a6a6a;
             --gris-clair: #a0a0a0;
         }
@@ -62,26 +65,19 @@
             background-color: var(--noir);
             color: var(--blanc);
             overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
         }
 
         /* UTILS */
         .gold-text {
             color: var(--rouge);
             text-shadow: 0 0 30px rgba(198, 51, 44, 0.3);
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
         }
 
         /* NOISE */
@@ -95,48 +91,6 @@
             z-index: 9999;
             opacity: 0.02;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
-
-        /* ===== PAILLETTES FLOTTANTES ===== */
-        .sparkles-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .sparkle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #d4af37;
-            border-radius: 50%;
-            animation: float-sparkle linear infinite;
-            box-shadow: 0 0 6px #d4af37;
-        }
-
-        @keyframes float-sparkle {
-            0% {
-                opacity: 0;
-                transform: translateY(100vh) rotate(0deg);
-            }
-
-            10% {
-                opacity: 1;
-            }
-
-            90% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-10vh) rotate(720deg);
-            }
         }
 
         /* HEADER */
@@ -172,7 +126,6 @@
         .logo img {
             height: 40px;
             width: auto;
-            /* filter: brightness(0) invert(1); removed */
         }
 
         .nav-links {
@@ -190,11 +143,6 @@
             text-transform: uppercase;
             position: relative;
             padding: 0.5rem 0;
-            font-family: 'Javanese Text', Georgia, serif;
-        }
-
-        .nav-links a.active {
-            color: var(--rouge);
         }
 
         .nav-links a::after {
@@ -205,61 +153,13 @@
             width: 0;
             height: 1px;
             background: var(--blanc);
-            transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: width 0.4s ease;
         }
 
         .nav-links a:hover::after {
             width: 100%;
         }
 
-        /* Search Bar */
-        .search-container {
-            display: flex;
-            align-items: center;
-            margin-left: 2rem;
-            position: relative;
-        }
-
-        .search-input {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid var(--blanc);
-            color: var(--blanc);
-            font-family: 'Javanese Text', serif;
-            font-size: 0.9rem;
-            padding: 0.3rem 0;
-            width: 200px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-            font-family: 'A Bit Sketchy', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .search-input:focus {
-            border-bottom-color: var(--rouge);
-            width: 250px;
-        }
-
-        .search-icon {
-            margin-left: -20px;
-            color: var(--blanc);
-            pointer-events: none;
-        }
-
-        header.header-scrolled .search-input {
-            border-bottom-color: rgba(255, 255, 255, 0.3);
-        }
-
-        header.header-scrolled .search-input:focus {
-            border-bottom-color: var(--rouge);
-        }
-
-        /* User Actions */
         .header-actions {
             display: flex;
             align-items: center;
@@ -277,7 +177,8 @@
             justify-content: center;
         }
 
-        .action-btn:hover {
+        .action-btn:hover,
+        .action-btn.active {
             color: var(--rouge);
         }
 
@@ -294,179 +195,175 @@
             background: var(--blanc);
         }
 
-        /* HERO PRO */
-        .pro-hero {
-            padding: 12rem 4rem 6rem;
+        /* CART SPECIFIC STYLES */
+        .cart-hero {
+            padding: 10rem 4rem 4rem;
             text-align: center;
-            position: relative;
+            background: radial-gradient(circle at 50% 50%, rgba(198, 51, 44, 0.05) 0%, transparent 70%);
         }
 
-        /* SECTION SEPARATOR */
-        .section-separator {
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(198, 51, 44, 0.3), transparent);
-            position: relative;
-            z-index: 2;
-        }
-
-        .pro-title {
+        .cart-title {
             font-family: 'TOP_SECRET', 'A Bit Sketchy', serif;
-            font-size: clamp(3rem, 6vw, 5rem);
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-        }
-
-        .pro-subtitle {
-            color: var(--gris-clair);
-            max-width: 700px;
-            margin: 0 auto 3rem;
-            font-size: 1.2rem;
-            line-height: 1.6;
-        }
-
-        /* SECTION LABEL */
-        .section-label {
-            font-family: 'A Bit Sketchy', Georgia, serif;
-            font-size: 0.75rem;
-            letter-spacing: 0.4em;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
             text-transform: uppercase;
-            color: var(--rouge);
-            margin-bottom: 2rem;
+        }
+
+        .cart-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 4rem 6rem;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 4rem;
+        }
+
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto auto;
+            align-items: center;
+            gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeUp 0.5s ease forwards;
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .cart-item-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+
+        .cart-item-details p {
+            font-size: 0.9rem;
+            color: var(--gris);
+        }
+
+        .cart-item-quantity {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.2rem;
         }
 
-        .section-label::before {
-            content: '';
-            width: 40px;
-            height: 1px;
-            background: var(--rouge);
-        }
-
-        /* SERVICES SECTION */
-        .services-section {
-            padding: 4rem 4rem 8rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 3rem;
-            margin-top: 4rem;
-        }
-
-        .service-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 3rem 2rem;
-            text-align: center;
-            transition: all 0.4s ease;
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(198, 51, 44, 0.3);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .service-icon {
-            font-size: 2.5rem;
-            color: var(--rouge);
-            margin-bottom: 1.5rem;
-            display: inline-block;
-        }
-
-        .service-title {
-            font-family: 'A Bit Sketchy', Georgia, serif;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+        .qty-btn {
+            background: transparent;
+            border: none;
             color: var(--blanc);
-        }
-
-        .service-desc {
-            color: var(--gris);
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        /* PORTFOLIO GRID */
-        .portfolio-section {
-            padding: 4rem 4rem 8rem;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-title {
-            font-family: 'A Bit Sketchy', Georgia, serif;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .portfolio-item {
-            position: relative;
-            aspect-ratio: 1/1;
-            overflow: hidden;
+            width: 30px;
+            height: 30px;
             cursor: pointer;
+            transition: color 0.3s;
         }
 
-        .portfolio-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
+        .qty-btn:hover {
+            color: var(--rouge);
         }
 
-        .portfolio-item:hover img {
-            transform: scale(1.1);
-        }
-
-        /* CTA SECTION */
-        .cta-section {
-            padding: 8rem 4rem;
+        .qty-input {
+            background: transparent;
+            border: none;
+            color: var(--blanc);
+            width: 40px;
             text-align: center;
+            font-family: 'Javanese Text', serif;
         }
 
-        .cta-title {
-            font-family: 'A Bit Sketchy', Georgia, serif;
-            font-size: 3rem;
+        .cart-item-price {
+            text-align: right;
+            font-size: 1.2rem;
+            color: var(--blanc);
+        }
+
+        .remove-btn {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--rouge);
+            font-size: 0.8rem;
+            text-decoration: underline;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            text-align: right;
+            width: 100%;
+        }
+
+        .cart-summary {
+            background: var(--noir-light);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .summary-title {
+            font-family: 'A Bit Sketchy', serif;
+            font-size: 1.5rem;
             margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1rem;
         }
 
-        .cta-btn {
-            display: inline-block;
-            padding: 1.2rem 3rem;
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: var(--gris-clair);
+        }
+
+        .summary-row.total {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.3rem;
+            color: var(--blanc);
+            font-weight: 600;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
             background: var(--rouge);
             color: var(--blanc);
-            text-decoration: none;
+            border: none;
             text-transform: uppercase;
             letter-spacing: 0.2em;
-            font-family: 'Javanese Text', serif;
+            margin-top: 2rem;
+            cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .cta-btn:hover {
-            background: var(--rouge);
+        .checkout-btn:hover {
+            background: var(--blanc);
             color: var(--noir);
         }
 
-        /* FOOTER */
+        .empty-cart-message {
+            text-align: center;
+            padding: 4rem;
+            font-size: 1.5rem;
+            color: var(--gris);
+            grid-column: 1 / -1;
+        }
+
+        /* FOOTER (Copied basic styles needed) */
         footer {
             padding: 6rem 4rem 3rem;
             background: var(--noir-profond);
@@ -481,10 +378,6 @@
             gap: 4rem;
         }
 
-        .footer-brand {
-            padding-right: 2rem;
-        }
-
         .footer-logo {
             display: inline-block;
             margin-bottom: 1.5rem;
@@ -494,7 +387,6 @@
         .footer-logo img {
             height: 50px;
             width: auto;
-            /* filter: brightness(0) invert(1); removed */
         }
 
         .footer-brand p {
@@ -585,13 +477,29 @@
 
         /* RESPONSIVE */
         @media (max-width: 900px) {
-            .services-grid {
+            .cart-layout {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+                padding: 2rem;
             }
 
-            .pro-title {
-                font-size: 3rem;
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+                gap: 1rem;
+            }
+
+            .cart-item-price,
+            .cart-item-quantity {
+                grid-column: 2;
+                justify-self: start;
+            }
+
+            .cart-item-price {
+                margin-top: 0.5rem;
+            }
+
+            .remove-btn {
+                grid-column: 2;
+                text-align: left;
             }
         }
 
@@ -636,6 +544,19 @@
                 gap: 1rem;
             }
         }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -643,8 +564,9 @@
     <!-- Noise Overlay -->
     <div class="noise"></div>
 
-    <!-- Paillettes flottantes -->
-    <div class="sparkles-container" id="sparkles"></div>
+    <!-- Paillettes -->
+    <div class="sparkles-container" id="sparkles"
+        style="position:fixed; width:100%; height:100%; pointer-events:none; z-index:1;"></div>
 
     <!-- Header -->
     <header>
@@ -654,16 +576,12 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="index.html">Accueil</a></li>
             <li><a href="boutique.html">Boutique</a></li>
-            <li><a href="pro.html" class="active">Pro</a></li>
+            <li><a href="pro.html">Pro</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
-        <!-- Barre de recherche -->
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="Rechercher...">
-            <i class="fas fa-search search-icon"></i>
-        </div>
+
         <div class="header-actions">
-            <a href="panier.html" class="action-btn" aria-label="Panier">
+            <a href="panier.html" class="action-btn active" aria-label="Panier">
                 <i class="fas fa-shopping-cart"></i>
             </a>
             <a href="login.html" class="action-btn" aria-label="Connexion">
@@ -676,82 +594,44 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="pro-hero">
-        <h1 class="pro-title">LE STUDIO <span class="gold-text">GRAPHIQUE</span></h1>
-        <p class="pro-subtitle">
-            Donnez vie à vos idées avec notre expertise créative.
-            Identité visuelle, illustration sur mesure et design de supports authentiques.
-        </p>
-    </section>
+    <main>
+        <!-- Hero Section -->
+        <section class="cart-hero">
+            <h1 class="cart-title"><span class="gold-text">VOTRE PANIER</span></h1>
+            <p style="color: var(--gris-clair); letter-spacing: 0.1em;">Finalisez votre commande</p>
+        </section>
 
-    <div class="section-separator"></div>
+        <!-- Cart Layout -->
+        <div class="cart-layout">
+            <!-- Cart Items List -->
+            <div class="cart-items" id="cartItemsContainer">
+                <!-- Items will be injected here via JS -->
+            </div>
 
-    <!-- Services Section -->
-    <section class="services-section">
-        <div class="services-grid">
-            <div class="service-card">
-                <i class="fas fa-pen-nib service-icon"></i>
-                <h3 class="service-title">Branding & Identité</h3>
-                <p class="service-desc">
-                    Création de logos, chartes graphiques et univers de marque uniques qui racontent votre histoire avec
-                    élégance et caractère.
-                </p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-paint-brush service-icon"></i>
-                <h3 class="service-title">Illustration Artiste</h3>
-                <p class="service-desc">
-                    Dessins originaux, illustrations faites main et digital painting pour vos projets d'édition, textile
-                    ou décoration.
-                </p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-layer-group service-icon"></i>
-                <h3 class="service-title">Support Print & Web</h3>
-                <p class="service-desc">
-                    Mise en page de brochures, affiches, packagings et visuels pour les réseaux sociaux, alliant
-                    esthétique et impact.
-                </p>
-            </div>
+            <!-- Order Summary -->
+            <aside class="cart-summary">
+                <h3 class="summary-title">Récapitulatif</h3>
+                <div class="summary-row">
+                    <span>Sous-total</span>
+                    <span id="subtotal">0,00€</span>
+                </div>
+                <div class="summary-row">
+                    <span>Livraison</span>
+                    <span>Calculé à l'étape suivante</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span class="gold-text" id="total">0,00€</span>
+                </div>
+                <button class="checkout-btn" onclick="alert('Redirection vers le paiement...')">
+                    Passer la commande
+                </button>
+                <div style="margin-top: 1rem; text-align: center; font-size: 0.8rem; color: var(--gris);">
+                    <i class="fas fa-lock"></i> Paiement 100% sécurisé
+                </div>
+            </aside>
         </div>
-    </section>
-
-    <div class="section-separator"></div>
-
-    <!-- Portfolio Section (Mock) -->
-    <section class="portfolio-section">
-        <div class="section-header">
-            <h2 class="section-title">Nos Réalisations</h2>
-            <p style="color:var(--gris-clair)">Un aperçu de notre savoir-faire</p>
-        </div>
-        <div class="portfolio-grid">
-            <!-- Using existing assets as placeholder for design work -->
-            <div class="portfolio-item">
-                <img src="assets/EDEN BOURBON.jpg" alt="Projet Graphisme">
-            </div>
-            <div class="portfolio-item">
-                <img src="assets/JACARANDA.jpg" alt="Projet Graphisme">
-            </div>
-            <div class="portfolio-item">
-                <img src="assets/TAKAMAKA.jpg" alt="Projet Graphisme">
-            </div>
-            <div class="portfolio-item">
-                <img src="assets/art1.png" alt="Projet Graphisme">
-            </div>
-        </div>
-    </section>
-
-    <div class="section-separator"></div>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <h2 class="cta-title">Vous avez un <span class="gold-text">Projet ?</span></h2>
-        <p style="color:var(--gris-clair); margin-bottom: 3rem; max-width: 600px; margin-left:auto; margin-right:auto;">
-            Discutons de vos besoins et créons ensemble une identité visuelle qui vous ressemble.
-        </p>
-        <a href="contact.html?type=pro" class="cta-btn">Contactez le Studio</a>
-    </section>
+    </main>
 
     <!-- Footer -->
     <footer>
@@ -783,9 +663,10 @@
             <div class="footer-column">
                 <h4>Informations</h4>
                 <ul>
+                    <li><a href="livraison.html">Livraison</a></li>
+                    <li><a href="retours.html">Retours</a></li>
                     <li><a href="cgv.html">CGV</a></li>
-                    <li><a href="mention-legale.html">Mentions légales</a></li>
-                    <li><a href="politique-confidentialie.html">Politique de confidentialité</a></li>
+                    <li><a href="mentions-legales.html">Mentions légales</a></li>
                 </ul>
             </div>
             <div class="footer-column">
@@ -806,29 +687,92 @@
     </footer>
 
     <script>
-        // ===== PAILLETTES FLOTTANTES =====
-        function createSparkles() {
-            const container = document.getElementById('sparkles');
-            const sparkleCount = 30;
+        // MOCK CART DATA
+        // In a real app, this would come from localStorage or an API
+        let cart = [
+            {
+                id: 1,
+                title: 'Eden Bourbon',
+                category: 'Papier Recyclé A4',
+                price: 46.08,
+                image: 'assets/EDEN BOURBON.jpg',
+                quantity: 1
+            },
+            {
+                id: 5,
+                title: 'Bassin des Aigrettes',
+                category: 'Toile Canvas',
+                price: 120.00,
+                image: 'assets/art1.png',
+                quantity: 1
+            }
+        ];
 
-            for (let i = 0; i < sparkleCount; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = Math.random() * 100 + '%';
-                sparkle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                sparkle.style.animationDelay = Math.random() * 10 + 's';
-                sparkle.style.width = (Math.random() * 3 + 1) + 'px';
-                sparkle.style.height = sparkle.style.width;
-                container.appendChild(sparkle);
+        const container = document.getElementById('cartItemsContainer');
+        const subtotalEl = document.getElementById('subtotal');
+        const totalEl = document.getElementById('total');
+
+        function renderCart() {
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart-message">
+                        <i class="fas fa-shopping-basket" style="font-size: 3rem; margin-bottom: 1rem; color: var(--rouge);"></i>
+                        <p>Votre panier est vide.</p>
+                        <a href="boutique.html" class="btn-primary" style="display: inline-block; margin-top: 1rem; color: var(--rouge); text-decoration: underline;">Retourner à la boutique</a>
+                    </div>
+                `;
+                subtotalEl.innerText = '0,00€';
+                totalEl.innerText = '0,00€';
+                return;
+            }
+
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.title}" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <h3>${item.title}</h3>
+                            <p>${item.category}</p>
+                            <button class="remove-btn" onclick="removeItem(${item.id})">Supprimer</button>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="qty-btn" onclick="updateQty(${item.id}, -1)">-</button>
+                            <input type="text" class="qty-input" value="${item.quantity}" readonly>
+                            <button class="qty-btn" onclick="updateQty(${item.id}, 1)">+</button>
+                        </div>
+                        <div class="cart-item-price">
+                            ${itemTotal.toFixed(2).replace('.', ',')}€
+                        </div>
+                    </div>
+                `;
+            });
+
+            subtotalEl.innerText = total.toFixed(2).replace('.', ',') + '€';
+            totalEl.innerText = total.toFixed(2).replace('.', ',') + '€';
+        }
+
+        function updateQty(id, change) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity < 1) item.quantity = 1;
+                renderCart();
             }
         }
 
-        // Initialize sparkles on page load
-        window.addEventListener('load', () => {
-            createSparkles();
-        });
+        function removeItem(id) {
+            cart = cart.filter(item => item.id !== id);
+            renderCart();
+        }
 
-        // ===== NAVBAR SCROLL EFFECT =====
+        // NAVBAR SCROLL
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
             if (window.scrollY > 50) {
@@ -838,23 +782,35 @@
             }
         });
 
-        // Hamburger Menu Logic
+        // MOBILE MENU
         const menuBtn = document.getElementById('menuBtn');
         const navLinks = document.getElementById('navLinks');
-
         menuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
-
-            // Animate hamburger lines
-            const spans = menuBtn.querySelectorAll('span');
-            if (navLinks.classList.contains('active')) {
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 6px)';
-                spans[1].style.transform = 'rotate(-45deg) translate(5px, -6px)';
-            } else {
-                spans[0].style.transform = 'none';
-                spans[1].style.transform = 'none';
-            }
         });
+
+        // INIT
+        renderCart();
+
+        // SPARKLES
+        function createSparkles() {
+            const container = document.getElementById('sparkles');
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.position = 'absolute';
+                sparkle.style.width = '2px';
+                sparkle.style.height = '2px';
+                sparkle.style.background = '#d4af37';
+                sparkle.style.borderRadius = '50%';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.opacity = Math.random();
+                sparkle.style.animation = `pulse ${Math.random() * 2 + 1}s infinite`;
+                container.appendChild(sparkle);
+            }
+        }
+        createSparkles();
     </script>
 </body>
 

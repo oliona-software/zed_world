@@ -219,6 +219,28 @@
             border-bottom-color: var(--rouge);
         }
 
+        /* User Actions */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: 2rem;
+        }
+
+        .action-btn {
+            color: var(--blanc);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            color: var(--rouge);
+        }
+
         .menu-btn {
             display: none;
             flex-direction: column;
@@ -719,6 +741,14 @@
             <input type="text" class="search-input" placeholder="Rechercher...">
             <i class="fas fa-search search-icon"></i>
         </div>
+        <div class="header-actions">
+            <a href="panier.html" class="action-btn" aria-label="Panier">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            <a href="login.html" class="action-btn" aria-label="Connexion">
+                <i class="fas fa-user"></i>
+            </a>
+        </div>
         <div class="menu-btn" id="menuBtn">
             <span></span>
             <span></span>
@@ -747,7 +777,7 @@
                     </li>
                     <ul class="sub-filters">
                         <li class="sub-filter-item" onclick="filterBy('recycle-a4', this)">Format A4</li>
-                        <li class="sub-filter-item" onclick="filterBy('recycle-a3', this)">Format A3+</li>
+                        <li class="sub-filter-item" onclick="filterBy('recycle-32x45', this)">Format 32x45</li>
                         <li class="sub-filter-item" onclick="filterBy('recycle-pano', this)">Panoramique</li>
                     </ul>
 
@@ -840,44 +870,34 @@
         // MOCK DATA GENERATED FROM ASSETS
         const products = [
             // PAPIER RECYCLE
-            { id: 1, title: 'Eden Bourbon', category: 'recycle-a4', price: '46,08€', image: 'assets/EDEN BOURBON.jpg' },
-            { id: 2, title: 'Jacaranda', category: 'recycle-a3', price: '52,00€', image: 'assets/JACARANDA.jpg' },
-            { id: 3, title: 'Takamaka', category: 'recycle-pano', price: '65,00€', image: 'assets/TAKAMAKA.jpg' },
-            { id: 4, title: 'Taïbit', category: 'recycle-pano', price: '65,00€', image: 'assets/TAÏBIT.jpg' },
+            { id: 2, title: 'La saline les bains', category: ['recycle-a4'], price: '23,04€', image: 'assets/la-saline-les-bain-papier-a4.png' },
+            { id: 3, title: 'Direction Taïbit', category: ['recycle-pano'], price: '46,08€', image: 'assets/direction-taibit-papier-panoramique.png' },
+            { id: 4, title: 'Taïbit', category: ['recycle-32x45'], price: '65,00€', image: 'assets/TAÏBIT.jpg' },
 
             // TOILES (Generic Arts 1-10)
-            { id: 5, title: 'Bassin des Aigrettes', category: 'toiles', price: '120,00€', image: 'assets/art1.png' },
-            { id: 6, title: 'Cirque de Mafate', category: 'toiles', price: '120,00€', image: 'assets/art2.jpg' },
-            { id: 7, title: 'Piton de la Fournaise', category: 'toiles', price: '120,00€', image: 'assets/art3.png' },
-            { id: 8, title: 'Plage de l\'Ermitage', category: 'toiles', price: '120,00€', image: 'assets/art4.png' },
-            { id: 9, title: 'Cascade Grand Galet', category: 'toiles', price: '120,00€', image: 'assets/art5.png' },
+            { id: 1, title: 'L\'île', category: ['toiles'], price: '119,82€', image: 'assets/ile-toile.jpg' },
 
             // TOILES EXTERIEURES (Generic Arts 11-15)
-            { id: 10, title: 'Jardin des Parfums', category: 'ext-80x120', price: '180,00€', image: 'assets/art6.png' },
-            { id: 11, title: 'Route du Volcan', category: 'ext-80x175', price: '250,00€', image: 'assets/art7.png' },
-            { id: 12, title: 'Forêt de Bébour', category: 'ext-80x120', price: '180,00€', image: 'assets/art8.png' },
+            { id: 11, title: 'Noël la réunion lé bel', category: ['ext-80x120'], price: '165,90€', image: 'assets/noel-reunion-le-bel-bache-80x120.jpg' },
+            { id: 12, title: 'Koup Kann', category: ['ext-80x175'], price: '165,90€', image: 'assets/koup-kann-bache-80x175.jpg' },
 
             // TEXTILES (Updated Categories)
-            { id: 13, title: 'T-Shirt "La Buse" (H)', category: 'textile-tshirt-homme', price: '35,00€', image: 'assets/art9.png' },
-            { id: 14, title: 'Serviette Lagon', category: 'textile-serviette', price: '45,00€', image: 'assets/art10.png' },
-            { id: 15, title: 'T-Shirt "Dodo" (F)', category: 'textile-tshirt-femme', price: '35,00€', image: 'assets/art11.png' },
+            { id: 13, title: 'T-Shirt homme', category: ['textile-tshirt-homme'], price: '35,00€', image: 'assets/placeholder-t-shirt-homme.png' },
+            { id: 14, title: 'Serviette Baleine', category: ['textile-serviette'], price: '37,71€', image: 'assets/serviette-de-plage.jpg' },
+            { id: 15, title: 'T-Shirt femme', category: ['textile-tshirt-femme'], price: '35,00€', image: 'assets/placeholder-t-shirt-femme.png' },
 
             // ART DE LA TABLE (IMG Files)
-            { id: 16, title: 'Set de Table Tropical', category: 'art-table', price: '25,00€', image: 'assets/IMG-20251008-WA0023.jpg' },
-            { id: 17, title: 'Mug Piton des Neiges', category: 'art-table', price: '15,00€', image: 'assets/IMG-20251008-WA0036.jpg' },
-            { id: 18, title: 'Dessous de Verre', category: 'art-table', price: '12,00€', image: 'assets/IMG-20251008-WA0050.jpg' },
+            { id: 16, title: 'Set 6 Shooters', category: ['art-table'], price: '32,26€', image: 'assets/set-6-shooter.jpg' },
+            { id: 17, title: 'Mug Céramique 350ML', category: ['art-table'], price: '13,82€', image: 'assets/mug-ceramique.jpg' },
 
             // INDISPENSABLES
-            { id: 19, title: 'Stylo Plume', category: 'indispensables', price: '8,00€', image: 'assets/art12.jpg' },
-            { id: 20, title: 'Carnet de Voyage', category: 'indispensables', price: '18,00€', image: 'assets/art13.png' },
-            { id: 21, title: 'Carte Postale', category: 'indispensables', price: '2,50€', image: 'assets/art14.png' }
+            { id: 19, title: 'Stylo Plume', category: ['indispensables'], price: '8,00€', image: 'assets/art12.jpg' },
+            { id: 20, title: 'Carnet de Voyage', category: ['indispensables'], price: '18,00€', image: 'assets/art13.png' },
+            { id: 21, title: 'Carte Postale', category: ['indispensables'], price: '2,50€', image: 'assets/art14.png' }
         ];
 
         // ADD MORE ASSETS AUTOMATICALLY DISTRIBUTED (MOCKING)
         const moreAssets = [
-            'art15.png', 'art16.png', 'art17.png', 'art18.jpg', 'art19.png', 'art20.png',
-            'art21.png', 'art22.jpg', 'art23.jpg', 'art24.png', 'art25.png', 'art26.png',
-            'art27.jpg', 'art28.jpg', 'art29.jpg', 'art30.jpg', 'art31.jpg', 'art32.jpg'
         ];
 
         let idCounter = 22;
@@ -887,7 +907,7 @@
             products.push({
                 id: idCounter++,
                 title: `Création #${idCounter}`,
-                category: randomCat,
+                category: [randomCat],
                 price: '45,00€',
                 image: `assets/${file}`
             });
@@ -920,10 +940,16 @@
             setTimeout(observeElements, 50); // Small delay to ensure DOM update
         }
 
-        function formatCategory(cat) {
+        function formatCategory(cats) {
+            // Check if cats is an array
+            if (!Array.isArray(cats)) {
+                // Should not happen with new data structure, but for safety
+                cats = [cats];
+            }
+
             const map = {
                 'recycle-a4': 'Papier Recyclé A4',
-                'recycle-a3': 'Papier Recyclé A3',
+                'recycle-32x45': 'Papier Recyclé 32x45',
                 'recycle-pano': 'Papier Panoramique',
                 'toiles': 'Toile Canvas',
                 'ext-80x120': 'Toile Ext. 80x120',
@@ -934,7 +960,12 @@
                 'art-table': 'Art de la Table',
                 'indispensables': 'Indispensable'
             };
-            return map[cat] || 'Collection ZED';
+
+            // Map each category to its display name
+            const names = cats.map(cat => map[cat] || 'Collection ZED');
+
+            // Join them with a separator
+            return names.join(' / ');
         }
 
         function filterBy(category, element) {
@@ -966,8 +997,13 @@
             if (category === 'all') {
                 renderProducts(products);
             } else {
-                // Support prefix matching (e.g. 'recycle' matches 'recycle-a4', 'recycle-a3', etc.)
-                const filtered = products.filter(p => p.category === category || p.category.startsWith(category + '-'));
+                // Support prefix matching and array checking
+                const filtered = products.filter(p => {
+                    // p.category is now an array
+                    return p.category.some(cat =>
+                        cat === category || cat.startsWith(category + '-')
+                    );
+                });
                 renderProducts(filtered);
             }
         }

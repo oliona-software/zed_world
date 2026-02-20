@@ -292,6 +292,28 @@
             border-bottom-color: var(--rouge);
         }
 
+        /* User Actions */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: 2rem;
+        }
+
+        .action-btn {
+            color: var(--blanc);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            color: var(--rouge);
+        }
+
         .menu-btn {
             display: none;
             flex-direction: column;
@@ -1022,6 +1044,14 @@
         <div class="search-container">
             <input type="text" class="search-input" placeholder="Rechercher...">
             <i class="fas fa-search search-icon"></i>
+        </div>
+        <div class="header-actions">
+            <a href="panier.html" class="action-btn" aria-label="Panier">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            <a href="login.html" class="action-btn" aria-label="Connexion">
+                <i class="fas fa-user"></i>
+            </a>
         </div>
         <div class="menu-btn" id="menuBtn">
             <span></span>

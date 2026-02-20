@@ -122,8 +122,6 @@
             justify-content: space-between;
             align-items: center;
             mix-blend-mode: difference;
-            background: rgba(29, 29, 27, 0.9);
-            backdrop-filter: blur(5px);
             transition: all 0.4s ease;
         }
 
@@ -225,6 +223,28 @@
 
         header.header-scrolled .search-input:focus {
             border-bottom-color: var(--rouge);
+        }
+
+        /* User Actions */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: 2rem;
+        }
+
+        .action-btn {
+            color: var(--blanc);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            color: var(--rouge);
         }
 
         .menu-btn {
@@ -405,6 +425,10 @@
             color: var(--gris);
         }
 
+        .footer-location i {
+            color: var(--rouge);
+        }
+
         @media(max-width: 992px) {
             .legal-container {
                 padding: 2rem;
@@ -504,6 +528,15 @@
             <span class="search-icon">
                 <i class="fas fa-search"></i>
             </span>
+        </div>
+
+        <div class="header-actions">
+            <a href="panier.html" class="action-btn" aria-label="Panier">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            <a href="login.html" class="action-btn" aria-label="Connexion">
+                <i class="fas fa-user"></i>
+            </a>
         </div>
 
         <div class="menu-btn" id="menuBtn"><span></span><span></span></div>
