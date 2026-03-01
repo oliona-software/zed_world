@@ -2141,6 +2141,47 @@
         function createGlobe() {
             const loader = new THREE.GLTFLoader();
 
+            // Function to create a fallback globe if the .glb fails
+            const createFallbackGlobe = () => {
+                console.log('Using fallback globe');
+                const wrapper = new THREE.Group();
+                scene.add(wrapper);
+
+                // Ocean Sphere
+                const oceanMesh = new THREE.Mesh(
+                    new THREE.SphereGeometry(1, 64, 64),
+                    new THREE.MeshStandardMaterial({
+                        color: 0x2A80B9, // Vibrant Blue
+                        roughness: 0.9,
+                        metalness: 0.0,
+                    })
+                );
+                wrapper.add(oceanMesh);
+
+                // Try to load a fallback texture if available
+                const textureLoader = new THREE.TextureLoader();
+                const fallbackTexturePath = 'assets/CARTE NEGATIF ZED WORLD.svg';
+                
+                textureLoader.load(fallbackTexturePath, (texture) => {
+                    const landMesh = new THREE.Mesh(
+                        new THREE.SphereGeometry(1.01, 64, 64),
+                        new THREE.MeshStandardMaterial({
+                            map: texture,
+                            transparent: true,
+                            alphaTest: 0.1,
+                            side: THREE.DoubleSide
+                        })
+                    );
+                    wrapper.add(landMesh);
+                }, undefined, (err) => {
+                    console.warn('Fallback texture failed to load', err);
+                });
+
+                wrapper.scale.set(4, 4, 4);
+                globe = wrapper;
+                isGlobeReady = true;
+            };
+
             loader.load('assets/globe_zed_world.glb', function (gltf) {
                 globe = gltf.scene;
 
@@ -2183,7 +2224,11 @@
 
                 // Load Texture
                 const textureLoader = new THREE.TextureLoader();
-                const mapTexture = textureLoader.load('assets/CARTE NÉGATIF VERT.webp');
+                const mapTexture = textureLoader.load('assets/CARTE NÉGATIF VERT.webp', (texture) => {
+                    // Success callback for texture
+                }, undefined, (err) => {
+                    console.warn('Map texture failed to load, using fallback texture');
+                });
                 mapTexture.flipY = false; // Fix UV deformation/orientation
                 mapTexture.colorSpace = THREE.SRGBColorSpace;
                 mapTexture.anisotropy = renderer.capabilities.maxAnisotropy; // Sharpness
@@ -2207,7 +2252,8 @@
                 isGlobeReady = true;
 
             }, undefined, function (error) {
-                console.error('An error happened loading the globe:', error);
+                console.error('An error happened loading the globe GLB:', error);
+                createFallbackGlobe();
             });
         }
 
